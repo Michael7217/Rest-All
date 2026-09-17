@@ -1,0 +1,5 @@
+export * from "./api/Api"
+export * from "./metodos/metodoscardapio"
+export * from "./metodos/metodoscomandas"
+export * from "./metodos/metodosfuncionarios"
+export * from "./metodos/metodospedidos"

@@ -1,0 +1,211 @@
+{
+  "cardapio": [
+    {
+      "id": 1,
+      "nome": "Hambúrguer Clássico",
+      "descricao": "Pão brioche, carne bovina, queijo, alface, tomate e molho especial.",
+      "categoria": "Hambúrgueres",
+      "preco": 28.9,
+      "disponivel": true,
+      "imagem": "/images/hamburguer-classico.jpg"
+    },
+    {
+      "id": 2,
+      "nome": "X-Bacon",
+      "descricao": "Pão brioche, carne bovina, queijo cheddar, bacon e molho especial.",
+      "categoria": "Hambúrgueres",
+      "preco": 32.9,
+      "disponivel": true,
+      "imagem": "/images/x-bacon.jpg"
+    },
+    {
+      "id": 3,
+      "nome": "Pizza Calabresa",
+      "descricao": "Molho de tomate, mussarela, calabresa e cebola.",
+      "categoria": "Pizzas",
+      "preco": 45.9,
+      "disponivel": true,
+      "imagem": "/images/pizza-calabresa.jpg"
+    },
+    {
+      "id": 4,
+      "nome": "Pizza Quatro Queijos",
+      "descricao": "Mussarela, provolone, parmesão e gorgonzola.",
+      "categoria": "Pizzas",
+      "preco": 49.9,
+      "disponivel": true,
+      "imagem": "/images/pizza-quatro-queijos.jpg"
+    },
+    {
+      "id": 5,
+      "nome": "Batata Frita",
+      "descricao": "Porção de batatas fritas crocantes.",
+      "categoria": "Acompanhamentos",
+      "preco": 18.9,
+      "disponivel": true,
+      "imagem": "/images/batata-frita.jpg"
+    },
+    {
+      "id": 6,
+      "nome": "Refrigerante Lata",
+      "descricao": "Refrigerante em lata de 350ml.",
+      "categoria": "Bebidas",
+      "preco": 6.5,
+      "disponivel": true,
+      "imagem": "/images/refrigerante.jpg"
+    },
+    {
+      "id": 7,
+      "nome": "Suco de Laranja",
+      "descricao": "Suco natural de laranja.",
+      "categoria": "Bebidas",
+      "preco": 9.9,
+      "disponivel": true,
+      "imagem": "/images/suco-laranja.jpg"
+    },
+    {
+      "id": 8,
+      "nome": "Pudim",
+      "descricao": "Pudim de leite condensado com calda de caramelo.",
+      "categoria": "Sobremesas",
+      "preco": 12.9,
+      "disponivel": true,
+      "imagem": "/images/pudim.jpg"
+    }
+  ],
+
+  "funcionarios": [
+    {
+      "id": 1,
+      "nome": "Carlos Silva",
+      "cpf": "12345678900",
+      "cargo": "Garçom",
+      "telefone": "(88) 99999-1111",
+      "email": "carlos@restall.com",
+      "senha": "123456",
+      "ativo": true
+    },
+    {
+      "id": 2,
+      "nome": "Ana Souza",
+      "cpf": "98765432100",
+      "cargo": "Garçonete",
+      "telefone": "(88) 99999-2222",
+      "email": "ana@restall.com",
+      "senha": "123456",
+      "ativo": true
+    },
+    {
+      "id": 3,
+      "nome": "Marcos Oliveira",
+      "cpf": "45678912300",
+      "cargo": "Cozinheiro",
+      "telefone": "(88) 99999-3333",
+      "email": "marcos@restall.com",
+      "senha": "123456",
+      "ativo": true
+    },
+    {
+      "id": 4,
+      "nome": "Francisco Silva",
+      "cpf": "32165498700",
+      "cargo": "Gerente",
+      "telefone": "(88) 99999-4444",
+      "email": "francisco@restall.com",
+      "senha": "123456",
+      "ativo": true
+    }
+  
+],
+
+  "comandas": [
+    {
+      "id": 1,
+      "numero": 101,
+      "mesa": 5,
+      "funcionarioId": 1,
+      "status": "aberta",
+      "dataAbertura": "2026-09-16T18:30:00",
+      "dataFechamento": null,
+      "valorTotal": 74.7
+    },
+    {
+      "id": 2,
+      "numero": 102,
+      "mesa": 8,
+      "funcionarioId": 2,
+      "status": "aberta",
+      "dataAbertura": "2026-09-16T19:00:00",
+      "dataFechamento": null,
+      "valorTotal": 51.8
+    },
+    {
+      "id": 3,
+      "numero": 103,
+      "mesa": 3,
+      "funcionarioId": 1,
+      "status": "fechada",
+      "dataAbertura": "2026-09-16T17:30:00",
+      "dataFechamento": "2026-09-16T18:45:00",
+      "valorTotal": 45.9
+    }
+  ],
+
+  "pedidos": [
+    {
+      "id": 1,
+      "comandaId": 1,
+      "itemId": 1,
+      "quantidade": 2,
+      "observacao": "Sem cebola",
+      "status": "entregue",
+      "precoUnitario": 28.9,
+      "valorTotal": 57.8,
+      "dataPedido": "2026-09-16T18:35:00"
+    },
+    {
+      "id": 2,
+      "comandaId": 1,
+      "itemId": 5,
+      "quantidade": 1,
+      "observacao": "Porção grande",
+      "status": "entregue",
+      "precoUnitario": 18.9,
+      "valorTotal": 18.9,
+      "dataPedido": "2026-09-16T18:40:00"
+    },
+    {
+      "id": 3,
+      "comandaId": 2,
+      "itemId": 3,
+      "quantidade": 1,
+      "observacao": "Pizza bem assada",
+      "status": "preparando",
+      "precoUnitario": 45.9,
+      "valorTotal": 45.9,
+      "dataPedido": "2026-09-16T19:05:00"
+    },
+    {
+      "id": 4,
+      "comandaId": 2,
+      "itemId": 6,
+      "quantidade": 1,
+      "observacao": "",
+      "status": "entregue",
+      "precoUnitario": 6.5,
+      "valorTotal": 6.5,
+      "dataPedido": "2026-09-16T19:05:00"
+    },
+    {
+      "id": 5,
+      "comandaId": 3,
+      "itemId": 4,
+      "quantidade": 1,
+      "observacao": "",
+      "status": "entregue",
+      "precoUnitario": 49.9,
+      "valorTotal": 49.9,
+      "dataPedido": "2026-09-16T17:40:00"
+    }
+  ]
+}
