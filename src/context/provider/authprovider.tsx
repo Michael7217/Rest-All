@@ -1,15 +1,15 @@
-import { useState, type ReactNode } from "react";
-import type { IFuncionario } from "../../utils";
+import { useCallback, useState } from "react";
+import type { IFuncionario, Iproviderprops } from "../../utils";
 import { funcionario } from "../../services";
 import { Authcontext } from "../context/Context";
 
-export const Authprovider = ({children}: {children: ReactNode}) => {
+export const Authprovider = ({children}: Iproviderprops) => {
     const [usuario, setUsuario] = useState<IFuncionario | null>(() => {
         const salvo = localStorage.getItem("usuario")
         return salvo ? JSON.parse(salvo) : null
     })
 
-    const login = async (email: string, senha: string) => {
+    const login = useCallback(async (email: string, senha: string) => {
         const response = await funcionario.listar()
         if(typeof response === "string") return false;
 
@@ -18,12 +18,12 @@ export const Authprovider = ({children}: {children: ReactNode}) => {
         setUsuario(achou)
         localStorage.setItem("usuario", JSON.stringify(achou))
         return true
-        }
+        },[])
     
-    const logout = () => {
+    const logout = useCallback(() => {
         setUsuario(null)
         localStorage.removeItem("usuario")  
-    }
+    },[])
 
     return(
         <Authcontext.Provider value={{usuario, islogged: !!usuario, login, logout}}>

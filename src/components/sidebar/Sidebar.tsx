@@ -27,6 +27,9 @@ export const Sidebar = ({isactivesidebar, toogle}: Itoogle) => {
             <Link to="/funcionarios"
                 className="cursor-pointer"
                 onClick={toogle}>Funcionários</Link>
+            <Link to="/perfil"
+                className="cursor-pointer"
+                onClick={toogle}>Perfil</Link>
             </div>
             </nav>
         </aside>
