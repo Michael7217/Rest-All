@@ -8,7 +8,7 @@ export const Layout = () => {
         <>
         <Header isactivesidebar={isActive} toogle={handletoogle} />
         <Sidebar isactivesidebar={isActive} toogle={handletoogle}/>
-        <main className={`${isActive ? "ml-80" : "ml-0"} pt-18 transition-all duration-200`}>
+        <main className={`${isActive ? "ml-[40%] md:ml-80" : "ml-0"} pt-25 px-8 transition-all duration-200`}>
             <Outlet/>
         </main>
         </>

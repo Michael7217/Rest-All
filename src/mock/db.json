@@ -7,7 +7,7 @@
       "categoria": "Hambúrgueres",
       "preco": 28.9,
       "disponivel": true,
-      "imagem": "/images/hamburguer-classico.jpg"
+      "imagem": "/images/sanduiche.jpeg"
     },
     {
       "id": 2,
@@ -16,7 +16,7 @@
       "categoria": "Hambúrgueres",
       "preco": 32.9,
       "disponivel": true,
-      "imagem": "/images/x-bacon.jpg"
+      "imagem": "/images/sanduiche.jpeg"
     },
     {
       "id": 3,
@@ -25,7 +25,7 @@
       "categoria": "Pizzas",
       "preco": 45.9,
       "disponivel": true,
-      "imagem": "/images/pizza-calabresa.jpg"
+      "imagem": "/images/sanduiche.jpeg"
     },
     {
       "id": 4,
@@ -34,7 +34,7 @@
       "categoria": "Pizzas",
       "preco": 49.9,
       "disponivel": true,
-      "imagem": "/images/pizza-quatro-queijos.jpg"
+      "imagem": "/images/sanduiche.jpeg"
     },
     {
       "id": 5,
@@ -43,7 +43,7 @@
       "categoria": "Acompanhamentos",
       "preco": 18.9,
       "disponivel": true,
-      "imagem": "/images/batata-frita.jpg"
+      "imagem": "/images/sanduiche.jpeg"
     },
     {
       "id": 6,
@@ -52,7 +52,7 @@
       "categoria": "Bebidas",
       "preco": 6.5,
       "disponivel": true,
-      "imagem": "/images/refrigerante.jpg"
+      "imagem": "/images/sanduiche.jpeg"
     },
     {
       "id": 7,
@@ -61,7 +61,7 @@
       "categoria": "Bebidas",
       "preco": 9.9,
       "disponivel": true,
-      "imagem": "/images/suco-laranja.jpg"
+      "imagem": "/images/sanduiche.jpeg"
     },
     {
       "id": 8,
@@ -70,7 +70,7 @@
       "categoria": "Sobremesas",
       "preco": 12.9,
       "disponivel": true,
-      "imagem": "/images/pudim.jpg"
+      "imagem": "/images/sanduiche.jpeg"
     }
   ],
 

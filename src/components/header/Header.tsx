@@ -7,7 +7,7 @@ export const Header = ({toogle, isactivesidebar}: Itoogle) => {
     const {logout} = useAuth()
     return(
     <>
-    <header className={`${isactivesidebar ? "ml-84" : "ml-4"} flex fixed top-0 right-0 left-0 justify-center bg-red-500 p-4 rounded-2xl m-4 transition-all duration-200`}>
+    <header className={`${isactivesidebar ? "ml-[43%] md:ml-84" : "ml-4"} flex fixed top-0 right-0 left-0 justify-center bg-red-500 p-4 rounded-2xl m-4 transition-all duration-200 `}>
         <div className="w-auto" >
             <Menu size={40} color="white" onClick={toogle} className=" cursor-pointer"/>
         </div>

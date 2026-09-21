@@ -1,8 +1,9 @@
-import type { IFuncionario } from "./IFuncionario"
+import type { Idadosuser } from "./Idadosuser"
 
 export interface Iauthcontext {
-    usuario: IFuncionario | null,
-    islogged: boolean,
+    
+    usuario: Idadosuser | null
+    islogged: boolean
     login: (email: string, senha: string) => Promise<boolean>
     logout: () => void
 }
