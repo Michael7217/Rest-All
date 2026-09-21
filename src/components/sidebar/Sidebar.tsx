@@ -2,9 +2,9 @@ import { Link } from "react-router-dom"
 import Logo from "../../assets/Logo.png"
 import type {Itoogle} from "../../utils"
 
-export const Sidebar = ({isactivesidebar, toogle}: Itoogle) => {
+export const Sidebar = ({isActive, toogle}: Itoogle) => {
     return(
-        <aside className={`${isactivesidebar ? "fixed" : "hidden"} h-screen top-0 w-2/5 md:w-xs`}>
+        <aside className={`${isActive ? "fixed" : "hidden"} h-screen top-0 w-2/5 md:w-xs`}>
             <nav className="flex flex-col items-center bg-red-500 h-full rounded-r-4xl justify-start gap-10">
             <div className="w-40 h-40">
                 <img src={Logo} alt="logo"

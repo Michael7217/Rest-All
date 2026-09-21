@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-export const useSidebar = () => {
+export const useToogle = () => {
     const [isActive, setIsActive] = useState(false)
     const handletoogle = () => {
         setIsActive(!isActive)

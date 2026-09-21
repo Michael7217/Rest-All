@@ -1,5 +1,5 @@
 export interface Itoogle {
-    toogle?: () => void
-    isactivesidebar?: boolean
+    toogle: () => void
+    isActive: boolean
 
 }
