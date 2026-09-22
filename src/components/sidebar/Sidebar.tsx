@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom"
 import Logo from "../../assets/Logo.png"
 import type {Itoogle} from "../../utils"
+import { useDados } from "../../hooks"
+
 
 export const Sidebar = ({isActive, toogle}: Itoogle) => {
+    const {Dados} = useDados()
+
+
     return(
         <aside className={`${isActive ? "fixed" : "hidden"} h-screen top-0 w-2/5 md:w-xs`}>
             <nav className="flex flex-col items-center bg-red-500 h-full rounded-r-4xl justify-start gap-10">
@@ -23,10 +28,12 @@ export const Sidebar = ({isActive, toogle}: Itoogle) => {
                 onClick={toogle}>Comandas</Link>
             <Link to="/pedidos"
                 className="cursor-pointer"
-                onClick={toogle}>Pedidos</Link>
+                onClick={toogle}>Pedidos
+            </Link>
+            {(Dados?.perfil === "GERENTE" || Dados?.perfil === "DONO" || Dados?.perfil === "ADMINISTRADOR") && (
             <Link to="/funcionarios"
                 className="cursor-pointer"
-                onClick={toogle}>Funcionários</Link>
+                onClick={toogle}>Funcionários</Link>)}
             <Link to="/perfil"
                 className="cursor-pointer"
                 onClick={toogle}>Perfil</Link>
