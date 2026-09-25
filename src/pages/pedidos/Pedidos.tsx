@@ -1,43 +1,66 @@
 import { useEffect, useState } from "react"
-import type { IPedido } from "../../utils"
-import { pedido } from "../../services"
+import type { ICampoFormulario, IPedido } from "../../utils"
+import { metodospedidos } from "../../services"
+import { Modal } from "../../components"
+import { useToogle } from "../../hooks"
+
+const campos: ICampoFormulario[] = [
+    { nome: "comandaId", rotulo: "ID da Comanda", tipo: "number", placeholder: "ex: 1", parse: (valor) => Number(valor) },
+    { nome: "itemId", rotulo: "ID do Item", tipo: "number", placeholder: "ex: 1", parse: (valor) => Number(valor) },
+    { nome: "quantidade", rotulo: "Quantidade", tipo: "number", placeholder: "ex: 1", parse: (valor) => Number(valor) },
+    { nome: "observacao", rotulo: "Observação", placeholder: "ex: carne bem passada" }
+]
 
 export const Pedidos = () => {
     const [Pedidos, setPedidos] = useState<IPedido[]>([])
+    const { isActive, handletoogle } = useToogle()
 
     useEffect(() => {
         const listarpedidos = async () => {
-            const response = await pedido.listar()
+            const response = await metodospedidos.listar()
             if (typeof response === "string") {
                 return
-            }else{
+            } else {
                 setPedidos(response)
             }
         }
         listarpedidos()
     }, [])
 
+    const recarregar = async () => {
+        const response = await metodospedidos.listar()
+        if (typeof response !== "string") setPedidos(response)
+    }
+
     return (
         <div className="flex flex-col items-center">
-            <div className="text-2xl font-bold text-red-500 relative right-2"><h1>Pedidos</h1></div>
+            <Modal isActive={isActive} toogle={handletoogle} criar={metodospedidos.criar} campos={campos} aoCriar={recarregar} />
+            <div className="relative flex w-full items-center mb-3.5">
+                {!isActive && (
+                    <button
+                        onClick={handletoogle}
+                        className="absolute right-0 cursor-pointer bg-white w-25 h-10 rounded-2xl border-2 border-red-500 text-red-500 font-bold"
+                    >Adicionar</button>
+                )}
+                <h1 className="w-full text-center text-2xl text-red-500 font-bold pr-4">Pedidos</h1>
+            </div>
             <div>
-                <h1 className="text-2xl text-red-500 font-bold mb-2 relative right-2">Cardápio</h1> 
-                            <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
-                                {Pedidos.map((pedido) => (
-                                    <article key={pedido.id} className="space-y-2 rounded-2xl border-2 p-4 bg-red-500 text-white">  
-                
-                                        <h2 className="font-bold text-xl">{pedido.comandaId}</h2>
-                                        <p>{pedido.valorTotal}</p>
-                                        <p>{pedido.status ? "Aberto" : "Fechado"}</p>
-                                        <strong className="text-xl">R$ {pedido.quantidade}</strong>
-                                        <p><strong>Categoria:</strong> {pedido.precoUnitario}</p>
-                                        {/* <div className="flex w-full justify-center">
+                <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
+                    {Pedidos.map((pedido) => (
+                        <article key={pedido.id} className="space-y-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
+
+                            <h2 className="font-bold text-xl">{pedido.comandaId}</h2>
+                            <p>{pedido.valorTotal}</p>
+                            <p>{pedido.status ? "Aberto" : "Fechado"}</p>
+                            <strong className="text-xl">R$ {pedido.quantidade}</strong>
+                            <p><strong>Categoria:</strong> {pedido.precoUnitario}</p>
+                            {/* <div className="flex w-full justify-center">
                                         <button className="cursor-pointer bg-white w-25 h-10 rounded-2xl text-red-500 font-black">Adicionar</button>
                                         </div> */}
-                                    </article>
-                                ))}
-                                </section>
-                            </div>
+                        </article>
+                    ))}
+                </section>
             </div>
+        </div>
     )
 }

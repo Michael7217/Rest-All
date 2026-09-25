@@ -1,10 +1,12 @@
 import {Routes, Route} from "react-router-dom"
-import { Home, Pedidos, Perfil } from "../../pages"
+import { Comandas, Home, Login, Pedidos, Perfil, Despesas } from "../../pages"
 import { Layout } from "../../layout"
-import { Login } from "../../pages/login/Login"
 import { Privateroutes } from "../routesprivate/private/private"
 import { Cardapio } from "../../pages/cardapio/Cardapio"
 import { AdminRoutes } from "../routesprivate/adminroutes/Adminroutes"
+import { Funcionarios } from "../../pages/funcionarios/Funcionarios"
+
+
 
 
 export const Rotas = () => {
@@ -17,11 +19,13 @@ export const Rotas = () => {
                         <Route path="/perfil" element={<Perfil/>}/>
                         <Route path="/cardapio" element={<Cardapio/>}/>
                         <Route path="/pedidos" element={<Pedidos/>}/>
+                        <Route path="/comandas" element={<Comandas/>}></Route>
                     </Route>
                 </Route>
                 <Route element={<AdminRoutes/>}>
                     <Route element={<Layout/>}>
-                        {/* <Route path="/funcionarios" element={<Funcionarios}/> */}
+                        <Route path="/funcionarios" element={<Funcionarios/>}/>
+                        <Route path="/despesas" element={<Despesas/>}/>
                     </Route>
                 </Route>
             </Routes>

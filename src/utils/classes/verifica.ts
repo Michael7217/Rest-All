@@ -2,8 +2,21 @@ import axios from "axios";
 
 export const Verifica = (Error: unknown) => {
     if(axios.isAxiosError(Error)){
-            return Error.message
+            const dados = Error.response?.data as { message?: string } | undefined
+            return dados?.message ?? Error.message
         }else{
             return "erro inesperado"
         }
 }
+
+// export default class extends Error{
+//     readonly detalhes?: Record<string, string>
+//     readonly status: number
+
+//     constructor(status: number, message: string, detalhes?: Record<string, string>){
+//         super(message)
+//         this.status = status
+//         this.detalhes = detalhes
+//     }
+
+// }

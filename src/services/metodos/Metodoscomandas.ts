@@ -3,7 +3,7 @@ import { Api } from "../api/Api"
 
 const listarcomandas = async () => {
     try {
-        const response = await Api().get<IComanda[]>("/comandas")
+        const response = await Api().get<IComanda[]>("/api/comandas")
         return response.data
     } catch (error) {
         return Verifica(error)
@@ -12,7 +12,7 @@ const listarcomandas = async () => {
 
 const deletarcomanda = async (id: number) => {
     try {
-        const response = await Api().delete<IComanda>(`/comandas/${id}`)
+        const response = await Api().delete<IComanda>(`/api/comandas/${id}`)
         return response
     } catch (error) {
         return Verifica(error)
@@ -36,7 +36,7 @@ const atualizarcomandaput = async (
     comanda: IComanda,
 ) => {
     try {
-        const response = await Api().put<IComanda>(`/comandas/${id}`, comanda)
+        const response = await Api().put<IComanda>(`/api/comandas/${id}`, comanda)
         return response
     } catch (error) {
         return Verifica(error)
@@ -45,7 +45,7 @@ const atualizarcomandaput = async (
 
 const buscarcomandaid = async (id: number) => {
     try {
-        const response = await Api().get<IComanda>(`/comandas/${id}`)
+        const response = await Api().get<IComanda>(`/api/comandas/${id}`)
         return response.data
     } catch (error) {
         return Verifica(error)
@@ -53,15 +53,16 @@ const buscarcomandaid = async (id: number) => {
 }
 
 const criarcomanda = async (comanda: IComanda) => {
+    const {id, funcionarioId, dataAbertura, dataFechamento, valorTotal, ...enviocomanda} = comanda
     try {
-        const response = await Api().post<IComanda>("/comandas", comanda)
+        const response = await Api().post<IComanda>("/api/comandas", enviocomanda)
         return response
     } catch (error) {
         return Verifica(error)
     }
 }
 
-export const comanda = {
+export const metodoscomandas = {
     listar: listarcomandas,
     deletar: deletarcomanda,
     atualizar: atualizarcomanda,

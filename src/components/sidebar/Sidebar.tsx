@@ -33,7 +33,13 @@ export const Sidebar = ({isActive, toogle}: Itoogle) => {
             {(Dados?.perfil === "GERENTE" || Dados?.perfil === "DONO" || Dados?.perfil === "ADMINISTRADOR") && (
             <Link to="/funcionarios"
                 className="cursor-pointer"
-                onClick={toogle}>Funcionários</Link>)}
+                onClick={toogle}>Funcionários</Link>
+                )}
+            {(Dados?.perfil === "GERENTE" || Dados?.perfil === "DONO" || Dados?.perfil === "ADMINISTRADOR") && (
+            <Link to="/despesas"
+                className="cursor-pointer"
+                onClick={toogle}>Despesas</Link>
+                )}
             <Link to="/perfil"
                 className="cursor-pointer"
                 onClick={toogle}>Perfil</Link>

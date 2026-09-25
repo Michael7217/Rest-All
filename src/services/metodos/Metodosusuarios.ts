@@ -1,4 +1,4 @@
-import { Verifica } from "../../utils"
+import { Verifica, type IFuncionario } from "../../utils"
 import type { Idadosretornados } from "../../utils/interfaces/Idadosretornados"
 import { Api } from "../api/Api"
 
@@ -11,10 +11,10 @@ const Listargerentes = async () => {
     }
 }
 
-const Registrargerentes = async (dados: Idadosretornados) => {
+const Registrargerentes = async (dados: IFuncionario) => {
     try {
-        const response = await Api().post<Idadosretornados[]>("/usuarios/gerente", dados)
-        return response.data
+        const response = await Api().post<IFuncionario>("/usuarios/gerente", dados)
+        return response
     } catch (error) {
         return Verifica(error)
     }
@@ -27,18 +27,21 @@ const Listarfuncionarios = async () => {
         return Verifica(error)
     }
 }
-const Registrarfuncionarios = async (dados: Idadosretornados) => {
+
+const Registrarfuncionarios = async (dados: IFuncionario) => {
+    const {ativo, id, ...enviodados} = dados
     try {
-        const response = await Api().post<Idadosretornados[]>("/usuarios/funcionario", dados)
-        return response.data
+        const response = await Api().post<IFuncionario>("/usuarios/funcionario", enviodados)
+        return response
     } catch (error) {
+    
         return Verifica(error)
     }
 }
-const Registrarproprietario = async (dados: Idadosretornados) => {
+const Registrarproprietario = async (dados: IFuncionario) => {
     try {
-        const response = await Api().post<Idadosretornados[]>("/usuarios/dono", dados)
-        return response.data
+        const response = await Api().post<IFuncionario>("/usuarios/dono", dados)
+        return response
     } catch (error) {
         return Verifica(error)
     }
