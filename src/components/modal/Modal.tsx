@@ -54,8 +54,9 @@ export const Modal = <T,>({ isActive, toogle, criar, campos, aoCriar }: IModalPr
 }
 
     return (
-        <div className={`${isActive ? "fixed" : "hidden"} flex flex-col bg-red-500 rounded-2xl z-50 mx-auto w-[80%] md:w-[55%] max-w-full left-0 right-0 overflow-hidden`}>
-            <form onSubmit={Handlesubmit} key={String(isActive)} className={`items-start bg-red-500  p-4 gap-1 rounded-2xl [&_h1]:text-center
+        <div className={`${isActive ? "fixed" : "hidden"} inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/40 p-4`}>
+            <div className="my-auto w-[80%] max-w-full rounded-2xl bg-red-500 md:w-[55%]">
+            <form onSubmit={Handlesubmit} key={String(isActive)} className={`max-h-[calc(100dvh-2rem)] overflow-y-auto items-start bg-red-500 p-4 gap-1 rounded-2xl [&_h1]:text-center
             [&_input]:bg-white [&_input]:placeholder-gray-500 [&_input]:rounded-2xl [&_input]:w-full [&_input]:p-2 [&_label]:text-white`}>
                 <h1 className="text-white font-bold self-center text-xl">{`Adicionar no ${titulo}`}</h1>
                 <div className={`flex flex-col w-full gap-y-1 ${emGrade ? "md:grid md:grid-cols-2 md:gap-x-4" : ""}`}>
@@ -77,6 +78,7 @@ export const Modal = <T,>({ isActive, toogle, criar, campos, aoCriar }: IModalPr
                 </div>
                 
             </form>
+            </div>
         </div>
     )
 }

@@ -1,8 +1,12 @@
 export * from "./home/Home"
 export * from "./login/Login"
+export * from "./registro/Registro"
 export * from "./perfil/Perfil"
 export * from "./pedidos/Pedidos"
 export * from "./comandas/Comandas"
 export * from "./funcionarios/Funcionarios"
 export * from "./cardapio/Cardapio"
 export * from "./despesas/Despesas"
+export * from "./gerentes/Gerentes"
+export * from "./proprietarios/Proprietarios"
+

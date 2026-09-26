@@ -1,7 +1,9 @@
 export interface Iregistro {
-    nomeRestaurante: string
-    cnpj: string
-    nomeUsuario: string
+    nome: string
+    restauranteId: number
+    cpf: string
+    cargo?: string
+    telefone: string
     email: string
     senha: string
 }

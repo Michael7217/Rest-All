@@ -19,18 +19,6 @@ const deletarcomanda = async (id: number) => {
     }
 }
 
-const atualizarcomanda = async (
-    id: number,
-    comanda: Partial<IComanda>,
-) => {
-    try {
-        const response = await Api().patch<IComanda>(`/comandas/${id}`, comanda)
-        return response
-    } catch (error) {
-        return Verifica(error)
-    }
-}
-
 const atualizarcomandaput = async (
     id: number,
     comanda: IComanda,
@@ -65,7 +53,6 @@ const criarcomanda = async (comanda: IComanda) => {
 export const metodoscomandas = {
     listar: listarcomandas,
     deletar: deletarcomanda,
-    atualizar: atualizarcomanda,
     atualizarput: atualizarcomandaput,
     buscarid: buscarcomandaid,
     criar: criarcomanda,
