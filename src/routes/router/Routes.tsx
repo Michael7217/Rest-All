@@ -1,5 +1,5 @@
 import {Routes, Route} from "react-router-dom"
-import { Comandas, Home, Login, Pedidos, Perfil, Despesas, Registro, Proprietarios } from "../../pages"
+import { Comandas, Home, Login, Pedidos, Perfil, Despesas, Registro, Proprietarios, Estoque } from "../../pages"
 import { Layout } from "../../layout"
 import { Privateroutes } from "../routesprivate/private/private"
 import { Cardapio } from "../../pages/cardapio/Cardapio"
@@ -10,11 +10,15 @@ import { Gerentes } from "../../pages"
 export const Rotas = () => {
     return(
             <Routes>
+                <Route element={<Layout/>}>
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="/cardapio" element={<Cardapio/>}/>
+                </Route>
+                
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/registro" element={<Registro/>}/>
                 <Route element={<Privateroutes/>}>
                     <Route element={<Layout/>}>
-                        <Route path="/" element={<Home/>}/>
                         <Route path="/perfil" element={<Perfil/>}/>
                         <Route path="/cardapio" element={<Cardapio/>}/>
                         <Route path="/pedidos" element={<Pedidos/>}/>
@@ -25,6 +29,7 @@ export const Rotas = () => {
                     <Route element={<Layout/>}>
                         <Route path="/funcionarios" element={<Funcionarios/>}/>
                         <Route path="/despesas" element={<Despesas/>}/>
+                        <Route path="/estoque" element={<Estoque/>}/>
                     </Route>
                 </Route>
                 <Route element={<AdminRoutes roles={["DONO", "ADMINISTRADOR"]}/>}>
@@ -32,7 +37,7 @@ export const Rotas = () => {
                         <Route path="/gerentes" element={<Gerentes/>}/>
                     </Route>
                 </Route>
-                <Route element={<AdminRoutes roles={["DONO", "ADMINISTRADOR"]}/>}>
+                <Route element={<AdminRoutes roles={["ADMINISTRADOR"]}/>}>
                     <Route element={<Layout/>}>
                         <Route path="/proprietarios" element={<Proprietarios/>}/>
                     </Route>

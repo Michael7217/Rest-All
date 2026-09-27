@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Modal } from "../../components"
 import type { ICampoFormulario, IComanda } from "../../utils"
-import { useToogle } from "../../hooks"
+import { useAuth, useToogle } from "../../hooks"
 import { metodoscomandas } from "../../services"
 import { Trash } from "lucide-react"
 
@@ -13,6 +13,8 @@ const campos: ICampoFormulario[] = [
 export const Comandas = () => {
     const [Comandas, setComandas] = useState<IComanda[]>([])
     const {isActive, handletoogle} = useToogle()
+    const { usuario } = useAuth()
+    const podeExcluir = usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO"
     useEffect(() => {
         const carregarComandas = async () => {
             const response = await metodoscomandas.listar()
@@ -21,7 +23,7 @@ export const Comandas = () => {
             }
         }
         carregarComandas()
-    }, [Comandas])
+    }, [])
     
     const recarregar = async () => {
             const response = await metodoscomandas.listar()
@@ -29,21 +31,14 @@ export const Comandas = () => {
                 setComandas(response)
             }
         }
-    const excluir = async (id: number) =>{
-            const duplicados = Comandas.filter((comanda) => comanda.id === id)
-            for (let i = 0; i < duplicados.length; i++) {
-                const response = await metodoscomandas.deletar(id)
-                if (typeof response === "string") {
-                    return
-                }
-                
-            }
-            recarregar()
-            }
+    const excluir = async (id: number) => {
+        const response = await metodoscomandas.deletar(id)
+        if (typeof response !== "string") await recarregar()
+    }
 
     return (
         <>
-        <Modal isActive={isActive} toogle={handletoogle} criar={metodoscomandas.criar} campos={campos}/>
+        <Modal isActive={isActive} toogle={handletoogle} criar={metodoscomandas.criar} campos={campos} aoCriar={recarregar}/>
         <div className="relative flex w-full items-center mb-3.5">
             {!isActive && (
                 <button
@@ -60,12 +55,11 @@ export const Comandas = () => {
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Comandas.map((comanda) => (
                     <article key={comanda.id} className="flex space-y-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
-                        
                         <div className="flex-2">
                         <h2 className="font-bold text-xl">Comanda: {comanda.numero}</h2>
                         <p>Mesa: {comanda.mesa}</p>
                         <strong className="text-xl">Total: R$ {comanda.valorTotal.toFixed(2)}</strong>
-                        <p><strong>Id Funcionario:</strong> {comanda.funcionarioId}</p>
+                        <p>ID Funcionário: {comanda.funcionarioId}</p>
                         <p>Status: {comanda.status ? "Aberta" : "Fechada"}</p>
                         <p>Data de abertura: {comanda.dataAbertura}</p>
                         <p>Data de fechamento{comanda.dataFechamento}</p>
@@ -73,9 +67,9 @@ export const Comandas = () => {
                         <button className="cursor-pointer bg-white w-25 h-10 rounded-2xl text-red-500 font-black">Adicionar</button>
                         </div> */}
                         </div>
-                        <div>
+                        {podeExcluir && comanda.id !== undefined && <div>
                             <button onClick={()=> excluir(comanda.id!)} className="cursor-pointer"><Trash/></button>
-                        </div>
+                        </div>}
                     </article>
                 ))}
                 </section>

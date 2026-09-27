@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import type { ICampoFormulario, Icardapio } from "../../utils"
 import { metodoscardapio } from "../../services"
 import { Modal } from "../../components"
-import { useToogle } from "../../hooks"
+import { useAuth, useToogle } from "../../hooks"
 import { Trash } from "lucide-react"
 
 const campos: ICampoFormulario[] = [
@@ -18,6 +18,8 @@ const campos: ICampoFormulario[] = [
 export const Cardapio = () => {
     const [Cardapio, setCardapio] = useState<Icardapio[]>([])
     const {isActive, handletoogle} = useToogle()
+    const {usuario, islogged} = useAuth()
+    const podeExcluir = usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO"
 
     useEffect(() => {
         const carregarcardapio = async () => {
@@ -51,7 +53,7 @@ export const Cardapio = () => {
         <>
         <Modal isActive={isActive} toogle={handletoogle} criar={metodoscardapio.criar} campos={campos} aoCriar={recarregar}/>
         <div className="relative flex w-full items-center mb-3.5">
-            {!isActive && (
+            {!isActive && islogged && (
                 <button
                     onClick={handletoogle}
                     className="absolute right-0 cursor-pointer bg-white w-25 h-10 rounded-2xl border-2 border-red-500 text-red-500 font-bold"
@@ -65,27 +67,27 @@ export const Cardapio = () => {
             
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Cardapio.map((prato) => (
-                    <article key={`${prato.id}-${prato.nome}`} className="flex space-y-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
-                        <div className="flex-2">
+                    <article key={`${prato.id}-${prato.nome}`} className="flex flex-col gap-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
                         {prato.imagem && (
                             <img
                                 src={prato.imagem}
                                 alt={prato.nome}
-                                className="h-40 w-full object-cover rounded-2xl" 
+                                className="block h-40 w-full object-cover object-center rounded-2xl mb-2" 
                             />
                         )}
-                        <p>Id: {prato.id}</p>
-                        <h2 className="font-bold text-xl">{prato.nome}</h2>
-                        <p>{prato.descricao}</p>
-                        <strong className="text-xl">R$ {prato.preco.toFixed(2)}</strong>
-                        <p><strong>Categoria:</strong> {prato.categoria}</p>
-                        <p>{prato.disponivel ? "Disponível" : "Indisponível"}</p>
-                        {/* <div className="flex w-full justify-center">
-                        <button className="cursor-pointer bg-white w-25 h-10 rounded-2xl text-red-500 font-black">Adicionar</button>
-                        </div> */}
-                        </div>
-                        <div>
-                            <button onClick={() => {excluir(prato.id!)}} className="cursor-pointer"><Trash/></button>
+                        <div className="flex justify-between gap-2">
+                            <div className="min-w-0 flex-1">
+                                {islogged && <p>Id: {prato.id}</p>}
+                                <h2 className="font-bold text-xl">Nome: {prato.nome}</h2>
+                                <p><strong>Descrição:</strong> {prato.descricao}</p>
+                                <strong className="text-xl">R$ {prato.preco.toFixed(2)}</strong>
+                                <p><strong>Categoria:</strong> {prato.categoria}</p>
+                                <p><strong>Disponibilidade:</strong> {prato.disponivel ? "Disponível" : "Indisponível"}</p>
+                            </div>
+                            {podeExcluir && prato.id !== undefined && (
+                                <button onClick={() => {excluir(prato.id!)}} className="cursor-pointer"><Trash/></button>
+                            )}
+                            
                         </div>
                     </article>
                 ))}

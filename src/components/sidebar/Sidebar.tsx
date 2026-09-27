@@ -24,32 +24,44 @@ export const Sidebar = ({isActive, toogle}: Itoogle) => {
             <Link to="/cardapio" 
                 className={inputclass}
                 onClick={toogle}>Cardápio</Link>
-            <Link to="/comandas" 
-                className={inputclass}
-                onClick={toogle}>Comandas</Link>
-            <Link to="/pedidos"
-                className={inputclass}
-                onClick={toogle}>Pedidos
-            </Link>
-            {(usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO" || usuario?.perfil === "ADMINISTRADOR") && (
-            <Link to="/funcionarios"
-                className={inputclass}
-                onClick={toogle}>Funcionários</Link>
+            {(usuario?.perfil === "GERENTE" || usuario?.perfil === "FUNCIONARIO" || usuario?.perfil === "DONO") && (
+                <>
+                    <Link to="/comandas" 
+                        className={inputclass}
+                        onClick={toogle}>Comandas</Link>
+                    <Link to="/pedidos"
+                        className={inputclass}
+                        onClick={toogle}>Pedidos
+                    </Link>
+                </>
                 )}
-            {(usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO" || usuario?.perfil === "ADMINISTRADOR") && (
-            <Link to="/despesas"
-                className={inputclass}
-                onClick={toogle}>Despesas</Link>
+            
+            {(usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO") && (
+                <>
+                    <Link to="/funcionarios"
+                        className={inputclass}
+                        onClick={toogle}>Funcionários</Link>
+                    <Link to="/estoque"
+                        className={inputclass}
+                        onClick={toogle}>Estoque</Link>
+                    <Link to="/despesas"
+                        className={inputclass}
+                        onClick={toogle}>Despesas</Link>
+                </>
                 )}
-            <Link to="/proprietarios"
-                className={inputclass}
-                onClick={toogle}>Proprietarios</Link>
-            <Link to="/gerentes"
+            {(usuario?.perfil === "DONO") && (
+                <Link to="/gerentes"
                 className={inputclass}
                 onClick={toogle}>Gerentes</Link>
-            <Link to="/perfil"
+                )}
+            {(usuario?.perfil === "ADMINISTRADOR") && (
+                <Link to="/proprietarios"
                 className={inputclass}
-                onClick={toogle}>Perfil</Link>
+                onClick={toogle}>Proprietarios</Link>
+                )}
+            {usuario && <Link to="/perfil"
+                className={inputclass}
+                onClick={toogle}>Perfil</Link>}
             </div>
             </nav>
         </aside>

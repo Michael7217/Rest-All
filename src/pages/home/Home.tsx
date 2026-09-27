@@ -1,7 +1,5 @@
 
-
 export const Home = () => {
-
     return(
         <>
         </>

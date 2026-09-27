@@ -9,4 +9,5 @@ export * from "./cardapio/Cardapio"
 export * from "./despesas/Despesas"
 export * from "./gerentes/Gerentes"
 export * from "./proprietarios/Proprietarios"
+export * from "./estoque/Estoque"
 

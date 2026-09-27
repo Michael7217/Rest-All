@@ -2,7 +2,8 @@ import { useEffect, useState } from "react"
 import type { ICampoFormulario, IPedido } from "../../utils"
 import { metodospedidos } from "../../services"
 import { Modal } from "../../components"
-import { useToogle } from "../../hooks"
+import { useAuth, useToogle } from "../../hooks"
+import { Trash } from "lucide-react"
 
 const campos: ICampoFormulario[] = [
     { nome: "comandaId", rotulo: "ID da Comanda", tipo: "number", placeholder: "ex: 1", parse: (valor) => Number(valor) },
@@ -14,6 +15,8 @@ const campos: ICampoFormulario[] = [
 export const Pedidos = () => {
     const [Pedidos, setPedidos] = useState<IPedido[]>([])
     const { isActive, handletoogle } = useToogle()
+    const { usuario } = useAuth()
+    const podeExcluir = usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO"
 
     useEffect(() => {
         const listarpedidos = async () => {
@@ -32,6 +35,11 @@ export const Pedidos = () => {
         if (typeof response !== "string") setPedidos(response)
     }
 
+    const excluir = async (id: number) => {
+        const response = await metodospedidos.deletar(id)
+        if (typeof response !== "string") await recarregar()
+    }
+
     return (
         <div className="flex flex-col items-center">
             <Modal isActive={isActive} toogle={handletoogle} criar={metodospedidos.criar} campos={campos} aoCriar={recarregar} />
@@ -47,13 +55,24 @@ export const Pedidos = () => {
             <div>
                 <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                     {Pedidos.map((pedido) => (
-                        <article key={pedido.id} className="space-y-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
-
-                            <h2 className="font-bold text-xl">{pedido.comandaId}</h2>
-                            <p>{pedido.valorTotal}</p>
-                            <p>{pedido.status ? "Aberto" : "Fechado"}</p>
-                            <strong className="text-xl">R$ {pedido.quantidade}</strong>
-                            <p><strong>Categoria:</strong> {pedido.precoUnitario}</p>
+                        <article key={pedido.id} className="flex justify-between gap-2 space-y-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
+                            <div>
+                                <h2 className="font-bold text-xl">{pedido.comandaId}</h2>
+                                <p>{pedido.valorTotal}</p>
+                                <p>{pedido.status ? "Aberto" : "Fechado"}</p>
+                                <strong className="text-xl">R$ {pedido.quantidade}</strong>
+                                <p><strong>Categoria:</strong> {pedido.precoUnitario}</p>
+                            </div>
+                            {podeExcluir && pedido.id !== undefined && (
+                                <button
+                                    type="button"
+                                    aria-label="Excluir pedido"
+                                    onClick={() => excluir(pedido.id!)}
+                                    className="cursor-pointer self-end"
+                                >
+                                    <Trash />
+                                </button>
+                            )}
                             {/* <div className="flex w-full justify-center">
                                         <button className="cursor-pointer bg-white w-25 h-10 rounded-2xl text-red-500 font-black">Adicionar</button>
                                         </div> */}

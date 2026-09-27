@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
-import { useToogle } from "../../hooks"
+import { useAuth, useToogle } from "../../hooks"
 import { Modal } from "../../components"
 import { metodosusuarios } from "../../services/metodos/Metodosusuarios"
 import type { Idadosretornados } from "../../utils/interfaces/Idadosretornados"
 import type { ICampoFormulario } from "../../utils"
+import { Trash } from "lucide-react"
 
 const campos: ICampoFormulario[] = [
     { nome: "nome", rotulo: "Nome", placeholder: "nome" },
@@ -17,6 +18,8 @@ const campos: ICampoFormulario[] = [
 
 export const Funcionarios = () => {
     const {isActive,handletoogle} = useToogle()
+    const { usuario } = useAuth()
+    const podeExcluir = usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO"
     const [Funcionarios, setFuncionarios] = useState<Idadosretornados[]>()
 
     useEffect(() => {
@@ -31,12 +34,10 @@ export const Funcionarios = () => {
         const response = await metodosusuarios.ListarFuncionarios()
         if (typeof response !== "string") setFuncionarios(response)
     }
-    // const excluir = async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) =>{
-    //     const funcionarioId = (e.target as HTMLButtonElement).value
-    //     try{
-    //         const response = await metodosusuarios
-    //     }
-    // }
+    const excluir = async (id: number) => {
+        const response = await metodosusuarios.DeletarFuncionario(id)
+        if (typeof response !== "string") await recarregar()
+    }
 
     return (
         <>
@@ -54,17 +55,26 @@ export const Funcionarios = () => {
             </div>
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Funcionarios?.map((funcionario) => (
-                    <article key={funcionario.nome} className="space-y-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
-                        <div>
-                        <h2 className="font-bold text-xl">{funcionario.nome}</h2>
-                        <p><strong>Id: </strong>{`${funcionario.id}`}</p>
-                        <p><strong>Cargo: </strong>{`${funcionario.cargo}`}</p>
-                        <p><strong>Email: </strong> {funcionario.email}</p>
-                        <p><strong>Telefone: </strong> {funcionario.telefone}</p>
-                        <p><strong>Ativo: </strong>{funcionario.ativo ? "Sim" : "Não"}</p>
-                        </div>
-                        <div>
-                            {/* <button onClick={excluir}>excluir</button> */}
+                    <article key={funcionario.nome} className="flex flex-col gap-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
+                        <div className="flex justify-between gap-2">
+                            <div className="min-w-0 flex-1">
+                                <h2 className="font-bold text-xl">{funcionario.nome}</h2>
+                                <p><strong>Id: </strong>{`${funcionario.id}`}</p>
+                                <p><strong>Cargo: </strong>{`${funcionario.cargo}`}</p>
+                                <p><strong>Email: </strong> {funcionario.email}</p>
+                                <p><strong>Telefone: </strong> {funcionario.telefone}</p>
+                                <p><strong>Ativo: </strong>{funcionario.ativo ? "Sim" : "Não"}</p>
+                            </div>
+                            {podeExcluir && funcionario.id !== undefined && (
+                                <button
+                                    type="button"
+                                    aria-label="Excluir funcionário"
+                                    onClick={() => excluir(funcionario.id!)}
+                                    className="cursor-pointer"
+                                >
+                                    <Trash />
+                                </button>
+                            )}
                         </div>
                         {/* <div className="flex w-full justify-center">
                         <button className="cursor-pointer bg-white w-25 h-10 rounded-2xl text-red-500 font-black">Adicionar</button>
