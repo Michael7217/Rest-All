@@ -4,7 +4,15 @@ import { Loader2 } from "lucide-react"
 import type { IModalProps } from "../../utils"
 
 
-export const Modal = <T,>({ isActive, toogle, criar, campos, aoCriar }: IModalProps<T>) => {
+export const Modal = <T, R = unknown,>({
+    isActive,
+    toogle,
+    criar,
+    campos,
+    aoCriar,
+    textoBotao = "Adicionar",
+    textoSucesso = "Adicionado com sucesso!",
+}: IModalProps<T, R>) => {
     const { pathname } = useLocation()
     const titulo = pathname.split("/")[1]
     const emGrade = titulo === "funcionarios" || titulo === "pedidos"
@@ -44,8 +52,8 @@ export const Modal = <T,>({ isActive, toogle, criar, campos, aoCriar }: IModalPr
             if (typeof response === "string"){
                 alert(response)
             }else{
-                alert("Adicionado com sucesso!")
-                aoCriar?.()
+                alert(textoSucesso)
+                aoCriar?.(response)
             }
             setIsLoading(false)
             setForm(inicial())
@@ -91,7 +99,7 @@ export const Modal = <T,>({ isActive, toogle, criar, campos, aoCriar }: IModalPr
                 </div>
                 <div className="flex w-full justify-around">
                     <button onClick={toogle} type="button" className="w-40 h-10 m-2 border-2 bg-white text-xl font-bold text-red-500 cursor-pointer rounded-2xl self-center mb-0">Cancelar</button>
-                    <button className="flex justify-center items-center w-40 h-10 m-2 border-2 bg-white text-xl font-bold text-red-500 cursor-pointer rounded-2xl self-center mb-0" type="submit" disabled={IsLoading}>{IsLoading ? <Loader2 className="animate-spin"/> : "Adicionar"}</button>
+                    <button className="flex justify-center items-center w-40 h-10 m-2 border-2 bg-white text-xl font-bold text-red-500 cursor-pointer rounded-2xl self-center mb-0" type="submit" disabled={IsLoading}>{IsLoading ? <Loader2 className="animate-spin"/> : textoBotao}</button>
                 </div>
                 
             </form>

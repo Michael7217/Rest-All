@@ -55,13 +55,16 @@ export const Pedidos = () => {
             <div>
                 <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                     {Pedidos.map((pedido) => (
-                        <article key={pedido.id} className="flex justify-between gap-2 space-y-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
-                            <div>
-                                <h2 className="font-bold text-xl">{pedido.comandaId}</h2>
-                                <p>{pedido.valorTotal}</p>
-                                <p>{pedido.status ? "Aberto" : "Fechado"}</p>
-                                <strong className="text-xl">R$ {pedido.quantidade}</strong>
-                                <p><strong>Categoria:</strong> {pedido.precoUnitario}</p>
+                        <article key={pedido.id} className="flex w-xl justify-between gap-2 space-y-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
+                            <div >
+                                <p>Item: {pedido.itemId}</p>
+                                <strong className="text-xl"> Quantidade: {pedido.quantidade}</strong>
+                                <p>Observação: {pedido.observacao}</p>
+                                <p className="font-bold text-xl">Comanda: {pedido.comandaId}</p>
+                                <p>Valor Total: R$ {pedido.valorTotal}</p>
+                                <p>Status: {pedido.status ? "Aberto" : "Fechado"}</p>
+                                <p>Valor Unitário: {pedido.precoUnitario}</p>
+                                <p>ID Item: {pedido.itemId}</p>
                             </div>
                             {podeExcluir && pedido.id !== undefined && (
                                 <button

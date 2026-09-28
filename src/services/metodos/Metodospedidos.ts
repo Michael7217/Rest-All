@@ -1,7 +1,15 @@
 import { Verifica, type IPedido, type Tstatuspedidos } from "../../utils"
 import { Api } from "../api/Api"
 
-const listarpedidos = async (id: number) => {
+const listarpedidos = async () => {
+    try {
+        const response = await Api().get<IPedido[]>(`/api/pedidos`)
+        return response.data
+    } catch (error) {
+        return Verifica(error)
+    }
+}
+const listarpedidospid = async (id: number) => {
     try {
         const response = await Api().get<IPedido[]>(`/api/pedidos/${id}`)
         return response.data
@@ -84,6 +92,7 @@ const editarstatus = async (id: number, status: Tstatuspedidos) => {
 
 export const metodospedidos = {
     listar: listarpedidos,
+    listarpid: listarpedidospid,
     listarpedidospcomanda: listarpedidospcomanda,
     deletar: deletarpedido,
     atualizar: atualizarpedido,
