@@ -3,7 +3,7 @@ import type { ICampoFormulario, Idespesa } from "../../utils"
 import { Modal } from "../../components"
 import { useAuth, useToogle } from "../../hooks"
 import { Trash } from "lucide-react"
-import { metodosdespesas } from "../../services/metodos/metodosdespesas"
+import { metodosdespesas } from "../../services/metodos/Metodosdespesas"
 
 const campos: ICampoFormulario[] = [
     { nome: "valor", rotulo: "Valor", tipo: "number", placeholder: "ex: 1.00", parse: (valor) => Number(valor) },

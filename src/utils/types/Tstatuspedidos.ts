@@ -1,0 +1,1 @@
+export type Tstatuspedidos =  "PREPARANDO" | "PRONTO" | "ENTREGUE" | "CANCELADO"

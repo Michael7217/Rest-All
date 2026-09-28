@@ -41,9 +41,8 @@ const buscardespesa = async (id: number) => {
 }
 
 const criardespesa = async (despesa: Idespesa) => {
-    const {id, restauranteId, ...enviodespesa} = despesa
     try {
-        const response = await Api().post<Idespesa>("/api/despesas", enviodespesa)
+        const response = await Api().post<Idespesa>("/api/despesas", despesa)
         return response
     } catch (error) {
         return Verifica(error)

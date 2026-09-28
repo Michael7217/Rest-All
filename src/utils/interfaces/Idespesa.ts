@@ -1,6 +1,6 @@
 export interface Idespesa{
-    id: number
-    restauranteId: number
+    id?: number
+    restauranteId?: number
     descricao: string
     valor: number
     dataDespesa: string

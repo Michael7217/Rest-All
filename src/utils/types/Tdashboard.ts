@@ -1,0 +1,1 @@
+export type Tdashboard = "DIA" | "SEMANA" | "MES" | "ANO"

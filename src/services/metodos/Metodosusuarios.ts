@@ -10,7 +10,31 @@ const Listargerentes = async () => {
         return Verifica(error)
     }
 }
+const Listargerentesall = async () => {
+    try {
+        const response = await Api().get<Idadosretornados[]>("/usuarios/gerente/todos")
+        return response.data
+    } catch (error) {
+        return Verifica(error)
+    }
+}
 
+const Listarproprietarios = async () => {
+    try {
+        const response = await Api().get<Idadosretornados[]>("/usuarios/dono")
+        return response.data
+    } catch (error) {
+        return Verifica(error)
+    }
+}
+const Editarfuncionario = async (dados: IFuncionario) => {
+    try {
+        const response = await Api().put<IFuncionario>(`/usuarios/funcionario/${dados.id}`, dados)
+        return response
+    } catch (error) {
+        return Verifica(error)
+    }
+}
 const Registrargerentes = async (dados: Iregistro) => {
     try {
         const response = await Api().post<Iregistro>("/usuarios/gerente", dados)
@@ -49,7 +73,7 @@ const Registrarproprietario = async (dados: Iregistro) => {
 
 const Deletargerente = async (id: number) => {
     try {
-        const response = await Api().post<IFuncionario>(`/usuarios/gerente/${id}`)
+        const response = await Api().delete<IFuncionario>(`/usuarios/gerente/${id}`)
         return response
     } catch (error) {
         return Verifica(error)
@@ -57,7 +81,7 @@ const Deletargerente = async (id: number) => {
 }
 const Deletarfuncionario = async (id: number) => {
     try {
-        const response = await Api().post<IFuncionario>(`/usuarios/funcionario/${id}`)
+        const response = await Api().delete<IFuncionario>(`/usuarios/funcionario/${id}`)
         return response
     } catch (error) {
         return Verifica(error)
@@ -66,7 +90,7 @@ const Deletarfuncionario = async (id: number) => {
 
 const Deletarproprietario = async (id: number) => {
     try {
-        const response = await Api().post<IFuncionario>(`/usuarios/dono/${id}`)
+        const response = await Api().delete<IFuncionario>(`/usuarios/dono/${id}`)
         return response
     } catch (error) {
         return Verifica(error)
@@ -75,8 +99,11 @@ const Deletarproprietario = async (id: number) => {
 
 export const metodosusuarios = {
     ListarGerentes: Listargerentes,
+    ListarGerentesall: Listargerentesall,
     RegistrarGerentes: Registrargerentes,
     ListarFuncionarios: Listarfuncionarios,
+    ListarProprietarios: Listarproprietarios,
+    Editarfuncionario: Editarfuncionario,
     RegistrarFuncionarios: Registrarfuncionarios,
     RegistrarProprietario: Registrarproprietario,
     DeletarGerente: Deletargerente,

@@ -39,9 +39,8 @@ const buscarcardapioid = async (id: number) => {
 }
 
 const criarcardapio = async (cardapio: Icardapio) => {
-    const {id, ...enviocardapio} = cardapio
     try {
-        const response = await Api().post<Icardapio>("/api/cardapio", enviocardapio)
+        const response = await Api().post<Icardapio>("/api/cardapio", cardapio)
         return response
     } catch (error) {
         return Verifica(error)
