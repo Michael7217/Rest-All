@@ -37,7 +37,10 @@ export const Sidebar = ({isActive, toogle}: Itoogle) => {
                 )}
             
             {(usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO") && (
-                <>
+                <>  
+                    <Link to="/dashboard"
+                        className={inputclass}
+                        onClick={toogle}>Dashboard</Link>
                     <Link to="/funcionarios"
                         className={inputclass}
                         onClick={toogle}>Funcionários</Link>

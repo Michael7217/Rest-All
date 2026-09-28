@@ -13,7 +13,7 @@ export const Modal = <T,>({ isActive, toogle, criar, campos, aoCriar }: IModalPr
         Object.fromEntries(campos.map((campo): [string, string] => [campo.nome, ""])) as Record<string, string>
     const [Form, setForm] = useState<Record<string, string>>(inicial)
     
-    const handlechange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handlechange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target
         setForm((prev) => ({
                 ...prev,
@@ -63,12 +63,29 @@ export const Modal = <T,>({ isActive, toogle, criar, campos, aoCriar }: IModalPr
                     {campos.map((campo) => (
                         <div key={campo.nome} className="flex flex-col gap-1">
                             <label>{campo.rotulo}</label>
-                            <input
-                                type={campo.tipo === "number" ? "number" : "text"}
-                                placeholder={campo.placeholder}
-                                name={campo.nome}
-                                onChange={handlechange}
-                            />
+                            {campo.tipo === "select" ? (
+                                <select
+                                    name={campo.nome}
+                                    value={Form[campo.nome] ?? ""}
+                                    onChange={handlechange}
+                                    required
+                                    className="w-full rounded-2xl bg-white p-2"
+                                >
+                                    <option value="" disabled>{campo.placeholder}</option>
+                                    {campo.opcoes?.map((opcao) => (
+                                        <option key={opcao.valor} value={opcao.valor}>
+                                            {opcao.rotulo}
+                                        </option>
+                                    ))}
+                                </select>
+                            ) : (
+                                <input
+                                    type={campo.tipo ?? "text"}
+                                    placeholder={campo.placeholder}
+                                    name={campo.nome}
+                                    onChange={handlechange}
+                                />
+                            )}
                         </div>
                     ))}
                 </div>

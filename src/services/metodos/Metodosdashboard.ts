@@ -1,11 +1,11 @@
-import { Verifica, type Idashboard } from "../../utils"
+import { Verifica, type Idashboard, type Idashboarddados } from "../../utils"
 import { Api } from "../api/Api"
 
 
 
 const dashboard = async (dados: Idashboard) => {
     try{
-        const response = await Api().get("/api/dashboard", {
+        const response = await Api().get<Idashboarddados>("/api/dashboard", {
             params: {
                 periodo: dados.periodo,
                 dataInicio: dados.dataInicio,
