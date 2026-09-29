@@ -20,14 +20,14 @@ export const Header = ({toogle, isActive}: Partial<Itoogle>) => {
 
     return(
     <>
-    <header className={`${isActive ? "ml-[43%] md:ml-84" : "ml-4"} flex fixed z-50 top-0 right-0 left-0 justify-center bg-red-500 p-4 rounded-2xl m-4 transition-all duration-200 `}>
-        <div className="w-auto" >
-            <Menu size={40} color="white" onClick={toogle} className=" cursor-pointer"/>
+    <header className={`${isActive ? "ml-3 lg:ml-84" : "ml-3"} fixed z-20 top-0 right-0 left-0 flex items-center justify-between gap-2 bg-red-500 p-3 m-3 sm:p-4 sm:m-4 rounded-2xl transition-all duration-200 h-15 lg:h-18`}>
+        <div className="shrink-0" >
+            <Menu size={40} color="white" onClick={toogle} className="cursor-pointer"/>
         </div>
-        <div className="flex flex-2">
-            <h1 className="flex-2 text-center text-nowrap text-white font-sans text-4xl overflow-hidden">Rest All</h1>
+        <div className="flex min-w-0 flex-1 justify-center px-1 sm:px-4">
+            <h1 className="truncate text-center text-lg text-white font-sans sm:text-xl md:text-2xl lg:text-4xl">Rest All</h1>
         </div>
-        <div>
+        <div className="shrink-0">
             <button className="cursor-pointer bg-white w-15 h-10 rounded-2xl text-red-500 font-bold" onClick={handleAuthButton}>{islogged ? "Sair" : "Entrar"}</button>
         </div>
     </header>       

@@ -3,14 +3,24 @@ import type { ICampoFormulario, Icardapio } from "../../utils"
 import { metodoscardapio } from "../../services"
 import { Modal } from "../../components"
 import { useAuth, useToogle } from "../../hooks"
-import { Trash } from "lucide-react"
+import { PenIcon, Trash } from "lucide-react"
 
 const campos: ICampoFormulario[] = [
     { nome: "nome", rotulo: "Nome", placeholder: "ex: vatapá" },
     { nome: "descricao", rotulo: "Descrição", placeholder: "prato da culinária paraense" },
     { nome: "categoria", rotulo: "Categoria", placeholder: "prato completo" },
     { nome: "preco", rotulo: "Preço", tipo: "number", placeholder: "ex: 20.0", parse: (valor) => Number(valor) },
-    { nome: "disponivel", rotulo: "Disponibilidade", placeholder: "ex: Sim/Não", parse: (valor) => valor.trim().toLowerCase() === "sim" },
+    {
+        nome: "disponivel",
+        rotulo: "Disponibilidade",
+        placeholder: "Selecione a disponibilidade",
+        tipo: "select",
+        opcoes: [
+            { valor: "true", rotulo: "Disponível" },
+            { valor: "false", rotulo: "Indisponível" },
+        ],
+        parse: (valor) => valor === "true",
+    },
     { nome: "imagem", rotulo: "Imagem", placeholder: "ex: example.com/image" },
 ]
 
@@ -20,6 +30,7 @@ export const Cardapio = () => {
     const {isActive, handletoogle} = useToogle()
     const {usuario, islogged} = useAuth()
     const podeExcluir = usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO"
+    const [pratoEmEdicao, setPratoEmEdicao] = useState<Icardapio | null>(null)
 
     useEffect(() => {
         const carregarcardapio = async () => {
@@ -37,29 +48,45 @@ export const Cardapio = () => {
             setCardapio(response)
         }
     }
-    const excluir = async (id: number) =>{
-        const duplicados = Cardapio.filter((prato) => prato.id === id)
-        for (let i = 0; i < duplicados.length; i++) {
-            const response = await metodoscardapio.deletar(id)
-            if (typeof response === "string") {
-                return
-            }
-            
-        }
-        recarregar()
-        }
+    const excluir = async (id: number) => {
+        const response = await metodoscardapio.deletar(id)
+        if (typeof response !== "string") await recarregar()
+    }
+
+    const fecharModal = () => {
+        setPratoEmEdicao(null)
+        handletoogle()
+    }
+
+    const editarPrato = (dados: Icardapio) => {
+        if (pratoEmEdicao?.id === undefined) return Promise.resolve("Prato sem ID")
+        return metodoscardapio.atualizarput(pratoEmEdicao.id, { ...dados, id: pratoEmEdicao.id })
+    }
 
     return(
         <>
-        <Modal isActive={isActive} toogle={handletoogle} criar={metodoscardapio.criar} campos={campos} aoCriar={recarregar}/>
+        <Modal
+            key={`${isActive}-${pratoEmEdicao?.id ?? "novo"}`}
+            isActive={isActive}
+            toogle={fecharModal}
+            criar={metodoscardapio.criar}
+            atualizar={editarPrato}
+            valoresIniciais={pratoEmEdicao ?? undefined}
+            modoEdicao={pratoEmEdicao !== null}
+            campos={campos}
+            aoCriar={recarregar}
+        />
         <div className="relative flex w-full items-center mb-3.5">
             {!isActive && islogged && (
                 <button
-                    onClick={handletoogle}
-                    className="absolute right-0 cursor-pointer bg-white w-25 h-10 rounded-2xl border-2 border-red-500 text-red-500 font-bold"
+                    onClick={() => {
+                        setPratoEmEdicao(null)
+                        handletoogle()
+                    }}
+                    className="absolute right-0 shrink-0 cursor-pointer bg-white w-25 h-10 rounded-2xl border-2 border-red-500 text-red-500 font-bold"
                 >Adicionar</button>
             )}
-            <h1 className="w-full text-center text-2xl text-red-500 font-bold pr-4">
+            <h1 className="w-full truncate pr-4 text-center text-xl text-red-500 font-bold sm:text-2xl">
                 Cardápio
             </h1>
         </div>
@@ -67,7 +94,7 @@ export const Cardapio = () => {
             
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Cardapio.map((prato) => (
-                    <article key={`${prato.id}-${prato.nome}`} className="flex flex-col gap-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
+                    <article key={`${prato.id}-${prato.nome}`} className="record-card flex flex-col gap-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
                         {prato.imagem && (
                             <img
                                 src={prato.imagem}
@@ -76,7 +103,7 @@ export const Cardapio = () => {
                             />
                         )}
                         <div className="flex justify-between gap-2">
-                            <div className="min-w-0 flex-1">
+                            <div className="min-w-0 flex-1 wrap-break-word">
                                 {islogged && <p>Id: {prato.id}</p>}
                                 <h2 className="font-bold text-xl">Nome: {prato.nome}</h2>
                                 <p><strong>Descrição:</strong> {prato.descricao}</p>
@@ -85,7 +112,29 @@ export const Cardapio = () => {
                                 <p><strong>Disponibilidade:</strong> {prato.disponivel ? "Disponível" : "Indisponível"}</p>
                             </div>
                             {podeExcluir && prato.id !== undefined && (
-                                <button onClick={() => {excluir(prato.id!)}} className="cursor-pointer"><Trash/></button>
+                                <div className="flex shrink-0 flex-col justify-around gap-3">
+                                    <button
+                                        type="button"
+                                        aria-label="Editar item do cardápio"
+                                        title="Editar item do cardápio"
+                                        onClick={() => {
+                                            setPratoEmEdicao(prato)
+                                            handletoogle()
+                                        }}
+                                        className="cursor-pointer"
+                                    >
+                                        <PenIcon />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        aria-label="Excluir item do cardápio"
+                                        title="Excluir item do cardápio"
+                                        onClick={() => excluir(prato.id!)}
+                                        className="cursor-pointer"
+                                    >
+                                        <Trash />
+                                    </button>
+                                </div>
                             )}
                             
                         </div>

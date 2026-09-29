@@ -29,7 +29,15 @@ const Listarproprietarios = async () => {
 }
 const Editarfuncionario = async (dados: IFuncionario) => {
     try {
-        const response = await Api().put<IFuncionario>(`/usuarios/funcionario/${dados.id}`, dados)
+        const response = await Api().put<IFuncionario>(`/usuarios/${dados.id}`, dados)
+        return response
+    } catch (error) {
+        return Verifica(error)
+    }
+}
+const Editarperfil = async (id: number, dados: Partial<Idadosretornados>) => {
+    try {
+        const response = await Api().put<Idadosretornados>(`/usuarios/${id}`, dados)
         return response
     } catch (error) {
         return Verifica(error)
@@ -38,6 +46,14 @@ const Editarfuncionario = async (dados: IFuncionario) => {
 const Registrargerentes = async (dados: Iregistro) => {
     try {
         const response = await Api().post<Iregistro>("/usuarios/gerente", dados)
+        return response
+    } catch (error) {
+        return Verifica(error)
+    }
+}
+const Editargerente = async (id: number, dados: Partial<Iregistro>) => {
+    try {
+        const response = await Api().put<Idadosretornados>(`/usuarios/gerente/${id}`, dados)
         return response
     } catch (error) {
         return Verifica(error)
@@ -101,9 +117,11 @@ export const metodosusuarios = {
     ListarGerentes: Listargerentes,
     ListarGerentesall: Listargerentesall,
     RegistrarGerentes: Registrargerentes,
+    EditarGerente: Editargerente,
     ListarFuncionarios: Listarfuncionarios,
     ListarProprietarios: Listarproprietarios,
     Editarfuncionario: Editarfuncionario,
+    EditarPerfil: Editarperfil,
     RegistrarFuncionarios: Registrarfuncionarios,
     RegistrarProprietario: Registrarproprietario,
     DeletarGerente: Deletargerente,

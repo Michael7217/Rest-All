@@ -40,7 +40,7 @@ const atualizarpedido = async (
     pedido: Partial<IPedido>,
 ) => {
     try {
-        const response = await Api().patch<IPedido>(`/pedidos/${id}`, pedido)
+        const response = await Api().patch<IPedido>(`/api/pedidos/${id}`, pedido)
         return response
     } catch (error) {
         return Verifica(error)
@@ -83,7 +83,8 @@ const criarpedido = async (pedido: IPedido) => {
 const editarstatus = async (id: number, status: Tstatuspedidos) => {
     try {
         const response = await Api().patch<IPedido>(`/api/pedidos/status/${id}/status`, {
-            params: {status}})
+            status,
+        })
         return response
     } catch (error) {
         return Verifica(error)

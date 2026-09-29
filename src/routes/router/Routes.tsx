@@ -1,5 +1,5 @@
 import {Routes, Route} from "react-router-dom"
-import { Comandas, Home, Login, Pedidos, Perfil, Despesas, Registro, Proprietarios, Estoque, Dashboard } from "../../pages"
+import { Comandas, Home, Login, Pedidos, Perfil, Despesas, Registro, Proprietarios, Estoque, Dashboard, Restaurantes, Meurestaurante } from "../../pages"
 import { Layout } from "../../layout"
 import { Privateroutes } from "../routesprivate/private/private"
 import { Cardapio } from "../../pages/cardapio/Cardapio"
@@ -31,11 +31,13 @@ export const Rotas = () => {
                         <Route path="/despesas" element={<Despesas/>}/>
                         <Route path="/estoque" element={<Estoque/>}/>
                         <Route path="/dashboard" element={<Dashboard/>}/>
+                        <Route path="/meu-restaurante" element={<Meurestaurante/>}/>
                     </Route>
                 </Route>
                 <Route element={<AdminRoutes roles={["DONO", "ADMINISTRADOR"]}/>}>
                     <Route element={<Layout/>}>
                         <Route path="/gerentes" element={<Gerentes/>}/>
+                        <Route path="/restaurantes" element={<Restaurantes/>}/>
                     </Route>
                 </Route>
                 <Route element={<AdminRoutes roles={["ADMINISTRADOR"]}/>}>

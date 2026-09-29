@@ -3,6 +3,7 @@ import {
     Building2,
     ChartNoAxesCombined,
     ClipboardList,
+    HamIcon,
     LogIn,
     PackageOpen,
     ReceiptText,
@@ -22,6 +23,7 @@ const acessos: Icardacesso[] = [
         descricao: "Consulte os pratos e produtos disponíveis.",
         rota: "/cardapio",
         icone: BookOpen,
+        perfis: ["FUNCIONARIO", "GERENTE", "DONO", "ADMINISTRADOR"],
     },
     {
         titulo: "Comandas",
@@ -78,6 +80,20 @@ const acessos: Icardacesso[] = [
         rota: "/proprietarios",
         icone: Building2,
         perfis: ["ADMINISTRADOR"],
+    },
+    {
+        titulo: "Restaurantes",
+        descricao: "Gerencie os restaurantes cadastrados.",
+        rota: "/restaurantes",
+        icone: HamIcon,
+        perfis: ["ADMINISTRADOR"],
+    },
+    {
+        titulo: "Meus restaurantes",
+        descricao: "Gerenciar as informações dos meus restaurantes.",
+        rota: "/meu-restaurante",
+        icone: ClipboardList,
+        perfis: ["GERENTE", "DONO", "ADMINISTRADOR"],
     },
     {
         titulo: "Meu perfil",

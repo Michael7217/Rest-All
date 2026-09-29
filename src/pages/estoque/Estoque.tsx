@@ -48,10 +48,10 @@ export const Estoque = () => {
             {!isActive && (
                 <button
                     onClick={handletoogle}
-                    className="absolute right-0 cursor-pointer bg-white w-25 h-10 rounded-2xl border-2 border-red-500 text-red-500 font-bold"
+                    className="absolute right-0 shrink-0 cursor-pointer bg-white w-25 h-10 rounded-2xl border-2 border-red-500 text-red-500 font-bold"
                 >Adicionar</button>
             )}
-            <h1 className="w-full text-center text-2xl text-red-500 font-bold pr-4">
+            <h1 className="w-full truncate pr-4 text-center text-xl text-red-500 font-bold sm:text-2xl">
                 Estoque
             </h1>
         </div>
@@ -59,19 +59,16 @@ export const Estoque = () => {
             
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Estoque.map((produto) => (
-                    <article key={`${produto.id}-${produto.nomeProduto}`} className="flex space-y-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
-                        <div className="flex-2">
+                    <article key={`${produto.id}-${produto.nomeProduto}`} className="record-card flex items-start justify-between gap-3 rounded-2xl border-2 p-4 bg-red-500 text-white">
+                        <div className="min-w-0 flex-1 wrap-break-word">
                             <p>Id: {produto.id}</p>
                             <h2 className="font-bold text-xl">{produto.nomeProduto}</h2>
                             <p>{produto.quantidade}</p>
                             <strong className="text-xl">R$ {produto.precoUnitario.toFixed(2)}</strong>
                             <p><strong>Categoria:</strong> {produto.dataValidade}</p>
                             <p>{produto.unidadeMedida}</p>
-                            {/* <div className="flex w-full justify-center">
-                            <button className="cursor-pointer bg-white w-25 h-10 rounded-2xl text-red-500 font-black">Adicionar</button>
-                            </div> */}
                         </div>
-                        {podeExcluir && produto.id !== undefined && <div>
+                        {podeExcluir && produto.id !== undefined && <div className="shrink-0">
                             <button onClick={() => {excluir(produto.id!)}} className="cursor-pointer"><Trash/></button>
                         </div>}
                     </article>

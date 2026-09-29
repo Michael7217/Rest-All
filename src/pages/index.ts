@@ -11,4 +11,6 @@ export * from "./gerentes/Gerentes"
 export * from "./proprietarios/Proprietarios"
 export * from "./estoque/Estoque"
 export * from "./dashboard/Dashboard"
+export * from "./restaurantes/Restaurantes"
+export * from "./meu-restaurante/Meurestaurante"
 

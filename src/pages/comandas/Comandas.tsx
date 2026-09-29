@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Modal, Modaldetalhes } from "../../components"
 import type { IPedido, ICampoFormulario, IComanda } from "../../utils"
-import { useAuth, useToogle } from "../../hooks"
+import { useAuth, useToast, useToogle } from "../../hooks"
 import { metodoscomandas, metodospedidos } from "../../services"
 import { Eye, Trash } from "lucide-react"
 
@@ -14,6 +14,7 @@ export const Comandas = () => {
     const [Comandas, setComandas] = useState<IComanda[]>([])
     const {isActive, handletoogle} = useToogle()
     const { usuario } = useAuth()
+    const { showToast } = useToast()
     const podeExcluir = usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO"
     const [Comandadetalhes, setComandadetalhes] = useState<IComanda | null>(null)
     const [Pedidoscomanda, setPedidoscomandas] = useState<IPedido[] | null>(null)
@@ -47,11 +48,11 @@ export const Comandas = () => {
             metodospedidos.listarpedidospcomanda(comanda.id),
         ])
         if(typeof respostaComanda === "string"){
-            alert(respostaComanda)
+            showToast(respostaComanda, "error")
             return
         }
         if(typeof respostaPedidos === "string"){
-            alert(respostaPedidos)
+            showToast(respostaPedidos, "error")
             return
         }
         setComandadetalhes(respostaComanda)
@@ -108,10 +109,10 @@ export const Comandas = () => {
             {!isActive && (
                 <button
                     onClick={handletoogle}
-                    className="absolute right-0 cursor-pointer bg-white w-25 h-10 rounded-2xl border-2 border-red-500 text-red-500 font-bold"
+                    className="absolute right-0 shrink-0 cursor-pointer bg-white w-25 h-10 rounded-2xl border-2 border-red-500 text-red-500 font-bold"
                 >Adicionar</button>
             )}
-            <h1 className="w-full text-center text-2xl text-red-500 font-sans pr-4">
+            <h1 className="w-full truncate pr-4 text-center text-xl text-red-500 font-bold sm:text-2xl">
                 Comandas
             </h1>
         </div>
@@ -119,8 +120,8 @@ export const Comandas = () => {
             
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Comandas.map((comanda) => (
-                    <article key={comanda.id} className="flex space-y-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
-                        <div className="flex-2">
+                    <article key={comanda.id} className="record-card flex flex-row rounded-2xl border-2 p-4 bg-red-500 text-white">
+                        <div className="min-w-0 flex-1 wrap-break-words">
                         <h2 className="font-bold text-xl">Comanda: {comanda.numero}</h2>
                         <p>Mesa: {comanda.mesa}</p>
                         <strong className="text-xl">Total: R$ {comanda.valorTotal.toFixed(2)}</strong>
@@ -128,14 +129,11 @@ export const Comandas = () => {
                         <p>Status: {comanda.status ? "Aberta" : "Fechada"}</p>
                         <p>Data de abertura: {comanda.dataAbertura}</p>
                         <p>Data de fechamento: {comanda.dataFechamento}</p>
-                        {/* <div className="flex w-full justify-center">
-                        <button className="cursor-pointer bg-white w-25 h-10 rounded-2xl text-red-500 font-black">Adicionar</button>
-                        </div> */}
                         </div>
-                        <div className="flex flex-col justify-around">
-                            <button onClick={() => Abrircomanda(comanda)}><Eye className="cursor-pointer"/></button>
+                        <div className="flex shrink-0 flex-col items-center justify-around gap-4">
+                            <button onClick={() => Abrircomanda(comanda)} aria-label="Ver detalhes"><Eye className="cursor-pointer"/></button>
                         {podeExcluir && comanda.id !== undefined && 
-                            <button onClick={()=> excluir(comanda.id!)} className="cursor-pointer"><Trash/></button>
+                            <button onClick={()=> excluir(comanda.id!)} className="cursor-pointer" aria-label="Excluir comanda"><Trash/></button>
                         }
                         </div>
                     </article>

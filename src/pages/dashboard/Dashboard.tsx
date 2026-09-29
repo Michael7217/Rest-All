@@ -68,19 +68,19 @@ export const Dashboard = () => {
                     <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                         <article className="rounded-lg border border-gray-200 bg-white p-4">
                             <h2 className="text-sm font-medium text-gray-500">Total vendido</h2>
-                            <p className="mt-2 text-2xl font-bold text-gray-900">{formatarMoeda(dados.totalVendido)}</p>
+                            <p className="mt-2 text-lg font-bold text-gray-900 sm:text-2xl">{formatarMoeda(dados.totalVendido)}</p>
                         </article>
                         <article className="rounded-lg border border-gray-200 bg-white p-4">
                             <h2 className="text-sm font-medium text-gray-500">Total de despesas</h2>
-                            <p className="mt-2 text-2xl font-bold text-gray-900">{formatarMoeda(dados.totalDespesas)}</p>
+                            <p className="mt-2 text-lg font-bold text-gray-900 sm:text-2xl">{formatarMoeda(dados.totalDespesas)}</p>
                         </article>
                         <article className="rounded-lg border border-gray-200 bg-white p-4">
                             <h2 className="text-sm font-medium text-gray-500">Lucro líquido</h2>
-                            <p className="mt-2 text-2xl font-bold text-gray-900">{formatarMoeda(dados.lucroLiquido)}</p>
+                            <p className="mt-2 text-lg font-bold text-gray-900 sm:text-2xl">{formatarMoeda(dados.lucroLiquido)}</p>
                         </article>
                         <article className="rounded-lg border border-gray-200 bg-white p-4">
                             <h2 className="text-sm font-medium text-gray-500">Quantidade de comandas</h2>
-                            <p className="mt-2 text-2xl font-bold text-gray-900">{dados.quantidadeComandas.toLocaleString("pt-BR")}</p>
+                            <p className="mt-2 text-lg font-bold text-gray-900 sm:text-2xl">{dados.quantidadeComandas.toLocaleString("pt-BR")}</p>
                         </article>
                     </section>
 

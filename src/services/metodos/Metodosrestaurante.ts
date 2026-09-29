@@ -4,7 +4,7 @@ import { Api } from "../api/Api"
 
 const Listarrestaurantes = async () => { //apenas admin
     try{
-        const response = await Api().get<Irestaurante>("/restaurantes")
+        const response = await Api().get<Irestaurante[]>("/restaurantes")
         return response.data
     }catch(error){
         return Verifica(error)

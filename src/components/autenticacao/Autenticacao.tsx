@@ -11,16 +11,16 @@ interface Iautenticacaoprops {
 export const Autenticacao = ({isLoading, Erro, metodo}: Iautenticacaoprops) => {
     const {pathname} = useLocation()
     const isCadastro = pathname === "/proprietarios"
-    const inputClass = "w-auto border-2 p-2 mx-5 placeholder:text-gray-700 border-white bg-white rounded-2xl h-15 m-2"
+    const inputClass = "w-full min-w-0 border-2 p-2 placeholder:text-gray-700 border-white bg-white rounded-2xl h-14"
 
     return (
         <div className={isCadastro
             ? "flex w-full justify-center"
-            : "fixed inset-1 flex h-dvh w-screen items-center justify-center overflow-hidden"}>
-            <div className="flex w-full max-w-xl flex-col items-center rounded-2xl bg-red-500 py-5 shadow-2xl shadow-red-400">
+            : "fixed inset-0 flex min-h-dvh w-full items-center justify-center overflow-y-auto px-4 py-6 sm:px-6"}>
+            <div className="my-auto flex w-full max-w-xl flex-col items-center rounded-2xl bg-red-500 px-4 py-5 shadow-2xl shadow-red-400 sm:px-6">
                 <img className="w-30 h-30" src={Logo} alt="logo" />
                 <h1 className="pb-4 text-3xl font-extrabold text-white">{isCadastro ? "Registrar" : "Login"}</h1>
-                <form className={`w-full ${isCadastro ? "grid grid-cols-2" : "flex flex-col"}`} name={isCadastro ? "registro" : "login"} onSubmit={metodo}>
+                <form className={`w-full ${isCadastro ? "grid grid-cols-1 gap-3 px-2 md:grid-cols-2 md:px-4" : "flex flex-col gap-3 px-2 sm:px-4"}`} name={isCadastro ? "registro" : "login"} onSubmit={metodo}>
                     {isCadastro && <>
                         <input className={inputClass} name="nome" type="text" placeholder="Nome completo" required />
                         <input className={inputClass} name="restauranteId" type="number" placeholder="ID do restaurante" required />
@@ -36,7 +36,7 @@ export const Autenticacao = ({isLoading, Erro, metodo}: Iautenticacaoprops) => {
                         </span>
                     )}
                     </div>
-                    <div className={`flex w-full flex-col items-center justify-center gap-3 px-5 ${isCadastro ? "col-span-2" : ""}`}>
+                    <div className={`flex w-full flex-col items-center justify-center gap-3 px-5 ${isCadastro ? "col-span-1 md:col-span-2" : ""}`}>
                         <button
                         type="submit"
                         disabled={isLoading}

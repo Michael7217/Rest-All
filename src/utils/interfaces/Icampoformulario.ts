@@ -6,4 +6,5 @@ export interface ICampoFormulario {
     opcoes?: { valor: string; rotulo: string }[]
     regex?: RegExp
     parse?: (valor: string) => unknown
+    somenteLeitura?: boolean
 }
