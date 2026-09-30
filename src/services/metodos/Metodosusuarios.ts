@@ -51,14 +51,7 @@ const Registrargerentes = async (dados: Iregistro) => {
         return Verifica(error)
     }
 }
-const Editargerente = async (id: number, dados: Partial<Iregistro>) => {
-    try {
-        const response = await Api().put<Idadosretornados>(`/usuarios/gerente/${id}`, dados)
-        return response
-    } catch (error) {
-        return Verifica(error)
-    }
-}
+
 const Listarfuncionarios = async () => {
     try {
         const response = await Api().get<Idadosretornados[]>("/usuarios/funcionario")
@@ -117,7 +110,6 @@ export const metodosusuarios = {
     ListarGerentes: Listargerentes,
     ListarGerentesall: Listargerentesall,
     RegistrarGerentes: Registrargerentes,
-    EditarGerente: Editargerente,
     ListarFuncionarios: Listarfuncionarios,
     ListarProprietarios: Listarproprietarios,
     Editarfuncionario: Editarfuncionario,

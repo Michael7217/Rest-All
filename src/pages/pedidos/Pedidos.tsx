@@ -112,7 +112,6 @@ export const Pedidos = () => {
                                 <p>Valor Total: R$ {pedido.valorTotal}</p>
                                 <p>Status: {pedido.status ?? "Não informado"}</p>
                                 <p>Valor Unitário: {pedido.precoUnitario}</p>
-                                <p>ID Item: {pedido.itemId}</p>
                             </div>
                             {podeExcluir && pedido.id !== undefined && (
                                 <div className="flex flex-col justify-around">

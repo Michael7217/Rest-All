@@ -20,7 +20,8 @@ export const Modal = <T, R = unknown,>({
     const { showToast } = useToast()
     const { pathname } = useLocation()
     const titulo = pathname.split("/")[1]
-    const emGrade = titulo === "funcionarios" || titulo === "pedidos"
+    const emGrade = (titulo === "funcionarios" || titulo === "pedidos")
+        && !(modoEdicao && campos.length === 1)
     const [IsLoading, setIsLoading] = useState(false)
     const inicial = () => {
         const valores = valoresIniciais as Record<string, unknown> | undefined

@@ -82,7 +82,7 @@ const criarpedido = async (pedido: IPedido) => {
 
 const editarstatus = async (id: number, status: Tstatuspedidos) => {
     try {
-        const response = await Api().patch<IPedido>(`/api/pedidos/status/${id}/status`, {
+        const response = await Api().patch<IPedido>(`/api/pedidos/${id}/status`, {
             status,
         })
         return response

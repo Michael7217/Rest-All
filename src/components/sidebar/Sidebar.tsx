@@ -30,11 +30,11 @@ export const Sidebar = ({isActive, toogle}: Itoogle) => {
             <Link to="/"
                 className={inputclass}
                 onClick={toogle}>Home</Link>
-            <Link to="/cardapio" 
-                className={inputclass}
-                onClick={toogle}>Cardápio</Link>
             {(usuario?.perfil === "GERENTE" || usuario?.perfil === "FUNCIONARIO" || usuario?.perfil === "DONO") && (
                 <>
+                    <Link to="/cardapio" 
+                        className={inputclass}
+                        onClick={toogle}>Cardápio</Link>
                     <Link to="/comandas" 
                         className={inputclass}
                         onClick={toogle}>Comandas</Link>
@@ -73,7 +73,7 @@ export const Sidebar = ({isActive, toogle}: Itoogle) => {
                 <>
                     <Link to="/proprietarios"
                     className={inputclass}
-                    onClick={toogle}>Proprietarios</Link>
+                    onClick={toogle}>Proprietários</Link>
                     <Link to="/restaurantes"
                     className={inputclass}
                     onClick={toogle}>Restaurantes</Link>

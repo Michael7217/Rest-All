@@ -25,7 +25,7 @@ export const Header = ({toogle, isActive}: Partial<Itoogle>) => {
             <Menu size={40} color="white" onClick={toogle} className="cursor-pointer"/>
         </div>
         <div className="flex min-w-0 flex-1 justify-center px-1 sm:px-4">
-            <h1 className="truncate text-center text-lg text-white font-sans sm:text-xl md:text-2xl lg:text-4xl">Rest All</h1>
+            <h1 className="truncate text-center text-xl text-white font-sans sm:text-xl md:text-2xl lg:text-4xl">Rest All</h1>
         </div>
         <div className="shrink-0">
             <button className="cursor-pointer bg-white w-15 h-10 rounded-2xl text-red-500 font-bold" onClick={handleAuthButton}>{islogged ? "Sair" : "Entrar"}</button>
