@@ -23,7 +23,7 @@ const acessos: Icardacesso[] = [
         descricao: "Consulte os pratos e produtos disponíveis.",
         rota: "/cardapio",
         icone: BookOpen,
-        perfis: ["FUNCIONARIO", "GERENTE", "DONO", "ADMINISTRADOR"],
+        // perfis: ["FUNCIONARIO", "GERENTE", "DONO", "ADMINISTRADOR"],
     },
     {
         titulo: "Comandas",

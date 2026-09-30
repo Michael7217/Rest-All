@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
-import type { ICampoFormulario, Icardapio } from "../../utils"
-import { metodoscardapio } from "../../services"
+import type { ICampoFormulario, Icardapio, Irestaurante } from "../../utils"
+import { metodoscardapio, metodosrestaurante } from "../../services"
 import { Modal } from "../../components"
 import { useAuth, useToogle } from "../../hooks"
-import { PenIcon, Trash } from "lucide-react"
+import { ArrowRight, PenIcon, Trash } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 const campos: ICampoFormulario[] = [
     { nome: "nome", rotulo: "Nome", placeholder: "ex: vatapá" },
@@ -27,10 +28,12 @@ const campos: ICampoFormulario[] = [
 
 export const Cardapio = () => {
     const [Cardapio, setCardapio] = useState<Icardapio[]>([])
+    const [Restaurantespublico, setRestaurantespublico] = useState<Partial<Irestaurante>[]>([])
     const {isActive, handletoogle} = useToogle()
     const {usuario, islogged} = useAuth()
     const podeExcluir = usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO"
     const [pratoEmEdicao, setPratoEmEdicao] = useState<Icardapio | null>(null)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const carregarcardapio = async () => {
@@ -39,8 +42,17 @@ export const Cardapio = () => {
                 setCardapio(response)
             }
         }
+        const carregarRestaurantes = async () => {
+            const response = await metodosrestaurante.Listarrestaurantespublico()
+            if (typeof response !== "string"){
+                setRestaurantespublico(response)
+            }
+        }
         carregarcardapio()
+        carregarRestaurantes()
     }, [])
+
+    
 
     const recarregar = async () => {
         const response = await metodoscardapio.listar()
@@ -63,7 +75,7 @@ export const Cardapio = () => {
         return metodoscardapio.atualizarput(pratoEmEdicao.id, { ...dados, id: pratoEmEdicao.id })
     }
 
-    return(
+    return (
         <>
         <Modal
             key={`${isActive}-${pratoEmEdicao?.id ?? "novo"}`}
@@ -87,12 +99,36 @@ export const Cardapio = () => {
                 >Adicionar</button>
             )}
             <h1 className="w-full truncate pr-4 text-center text-xl text-red-500 font-bold sm:text-2xl">
-                Cardápio
+                {islogged ? "Cardápio" : "Restaurantes"}
             </h1>
         </div>
         <div className="flex flex-col items-center">
-            
-            <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
+            {!islogged ? (<section className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
+                    {Restaurantespublico?.map((restaurante) => (
+                        <article key={restaurante.id} className="record-card flex justify-between gap-2 rounded-2xl border-2 bg-red-500 p-4 text-white">
+                            <div className="min-w-0 flex-1 wrap-break-words flex flex-col">
+                                <strong>Nome: {restaurante.nome}</strong>              
+                                <strong>Status: {restaurante.status ? "Aberto" : "Fechado"}</strong>
+                                <p>Endereço: {restaurante.endereco || "Sem endereço associado"}</p>
+                                <p className="font-bold">Telefone: {restaurante.telefone || "Sem telefone associado"}</p>
+                            </div>
+                            {restaurante.id !== undefined && (
+                                <button
+                                    type="button"
+                                    aria-label={`Editar restaurante ${restaurante.nome}`}
+                                    title="Editar restaurante"
+                                    onClick={() => {
+                                        navigate(`/cardapio/${restaurante.id}`)
+                                    }}
+                                    className="shrink-0 cursor-pointer self-center"
+                                >
+                                    <ArrowRight/>
+                                </button>
+                            )}
+                        </article>
+                    ))}
+                </section>) : 
+                (<section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Cardapio.map((prato) => (
                     <article key={`${prato.id}-${prato.nome}`} className="record-card flex flex-col gap-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
                         {prato.imagem && (
@@ -140,7 +176,11 @@ export const Cardapio = () => {
                         </div>
                     </article>
                 ))}
-                </section>
+                </section>)}
+
+
+            
+            
             </div>
         </>
     )

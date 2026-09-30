@@ -10,6 +10,14 @@ const Listarrestaurantes = async () => { //apenas admin
         return Verifica(error)
     }
 }
+const Listarrestaurantespublico = async () => { //publico
+    try{
+        const response = await Api().get<Partial<Irestaurante>[]>("/restaurantes/publico")
+        return response.data
+    }catch(error){
+        return Verifica(error)
+    }
+}
 
 const Editarrestaurantes = async (dados: Irestaurante) => { //apenas admin
     try{
@@ -32,6 +40,7 @@ const Editarrestaurantesall = async (dados: Irestaurante) => { //apenas dono
 
 export const metodosrestaurante = {
     Listarrestaurantes: Listarrestaurantes,
+    Listarrestaurantespublico: Listarrestaurantespublico,
     Editarrestaurantes: Editarrestaurantes,
     Editarrestaurantesall: Editarrestaurantesall
 }

@@ -9,6 +9,14 @@ const listarcardapio = async () => {
         return Verifica(error)
     }
 }
+const listarcardapiopublico = async (restauranteId: number) => {
+    try {
+        const response = await Api().get<Icardapio[]>(`/api/cardapio/restaurante/${restauranteId}`)
+        return response.data
+    } catch (error) {
+        return Verifica(error)
+    }
+}
 
 const deletarcardapio = async (id: number) => {
     try {
@@ -49,6 +57,7 @@ const criarcardapio = async (cardapio: Icardapio) => {
 
 export const metodoscardapio = {
     listar: listarcardapio,
+    listarcardapiopublico: listarcardapiopublico,
     deletar: deletarcardapio,
     atualizarput: atualizarcardapiopid,
     buscarid: buscarcardapioid,

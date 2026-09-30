@@ -1,5 +1,5 @@
 import {Routes, Route} from "react-router-dom"
-import { Comandas, Home, Login, Pedidos, Perfil, Despesas, Registro, Proprietarios, Estoque, Dashboard, Restaurantes, Meurestaurante } from "../../pages"
+import { Comandas, Home, Login, Pedidos, Perfil, Despesas, Registro, Proprietarios, Estoque, Dashboard, Restaurantes, Meurestaurante, Cardapiopublico } from "../../pages"
 import { Layout } from "../../layout"
 import { Privateroutes } from "../routesprivate/private/private"
 import { Cardapio } from "../../pages/cardapio/Cardapio"
@@ -10,17 +10,17 @@ import { Gerentes } from "../../pages"
 export const Rotas = () => {
     return(
             <Routes>
+                // rotas publicas
+                <Route path="/login" element={<Login/>}/>
                 <Route element={<Layout/>}>
                     <Route path="/" element={<Home/>}/>
-                    <Route path="/cardapio" element={<Cardapio/>}/>
+                        <Route path="/cardapio" element={<Cardapio/>}/>
+                    <Route path="/cardapio/:Idrestaurante" element={<Cardapiopublico/>}/>
                 </Route>
-                
-                <Route path="/login" element={<Login/>}/>
-                <Route path="/registro" element={<Registro/>}/>
+                // rotas privadas
                 <Route element={<Privateroutes/>}>
                     <Route element={<Layout/>}>
                         <Route path="/perfil" element={<Perfil/>}/>
-                        <Route path="/cardapio" element={<Cardapio/>}/>
                         <Route path="/pedidos" element={<Pedidos/>}/>
                         <Route path="/comandas" element={<Comandas/>}></Route>
                     </Route>
@@ -43,6 +43,7 @@ export const Rotas = () => {
                 <Route element={<AdminRoutes roles={["ADMINISTRADOR"]}/>}>
                     <Route element={<Layout/>}>
                         <Route path="/proprietarios" element={<Proprietarios/>}/>
+                        <Route path="/registro" element={<Registro/>}/>
                     </Route>
                 </Route>
             </Routes>

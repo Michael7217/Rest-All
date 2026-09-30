@@ -13,4 +13,5 @@ export * from "./estoque/Estoque"
 export * from "./dashboard/Dashboard"
 export * from "./restaurantes/Restaurantes"
 export * from "./meu-restaurante/Meurestaurante"
+export * from "./cardapio-publico/Cardapiopublico"
 
