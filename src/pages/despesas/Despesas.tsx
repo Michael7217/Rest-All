@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import type { ICampoFormulario, Idespesa } from "../../utils"
-import { Modal } from "../../components"
+import { EstadoVazio, Modal } from "../../components"
 import { useAuth, useToast, useToogle } from "../../hooks"
 import { PenIcon, Trash } from "lucide-react"
 import { metodosdespesas } from "../../services/metodos/Metodosdespesas"
@@ -90,7 +90,10 @@ export const Despesas = () => {
         <div className="flex flex-col items-center">
             
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
-                {Despesas.map((despesa) => (
+                {Despesas.length === 0 ? (
+                    <EstadoVazio />
+                ) :
+                Despesas.map((despesa) => (
                     <article key={`${despesa.id}`} className="record-card flex items-start justify-between gap-3 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                         <div className="min-w-0 flex-1 space-y-1 wrap-break-word">
                             <h2 className="text-lg font-bold">{despesa.descricao}</h2>

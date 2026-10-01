@@ -3,6 +3,7 @@ import { type Icardapio } from "../../utils"
 import { metodoscardapio } from "../../services"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
+import { EstadoVazio } from "../../components"
 
 
 export const Cardapiopublico = () => {
@@ -34,7 +35,10 @@ export const Cardapiopublico = () => {
             </h1>
         </div>
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
-                {Cardapiopublico.map((prato) => ( 
+                {Cardapiopublico.length === 0 ? (
+                    <EstadoVazio />
+                ) :
+                Cardapiopublico.map((prato) => ( 
                     <article key={`${prato.id}-${prato.nome}`} className="record-card flex flex-col gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                         {prato.imagem && (
                             <img

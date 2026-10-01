@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Modal } from "../../components"
+import { EstadoVazio, Modal } from "../../components"
 import { useToast, useToogle } from "../../hooks"
 import { metodosusuarios } from "../../services/metodos/Metodosusuarios"
 import type { ICampoFormulario } from "../../utils"
@@ -74,7 +74,9 @@ export const Proprietarios = () => {
                 </h1>
             </div>
             <section className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
-                {proprietarios.map((proprietario) => (
+                {proprietarios.length === 0 ? (
+                    <EstadoVazio />
+                ) : proprietarios.map((proprietario) => (
                     <article key={proprietario.id ?? proprietario.email} className="record-card flex flex-col gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                         <div className="flex justify-between gap-2">
                             <div className="min-w-0 flex-1 wrap-break-word">

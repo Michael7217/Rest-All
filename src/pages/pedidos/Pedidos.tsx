@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import type { ICampoFormulario, Icardapio, IComanda, IPedido, Tstatuspedidos } from "../../utils"
 import { metodoscardapio, metodoscomandas, metodospedidos } from "../../services"
-import { Modal } from "../../components"
+import { EstadoVazio, Modal } from "../../components"
 import { useAuth, useToast, useToogle } from "../../hooks"
 import { ListChecks, PenIcon, Trash } from "lucide-react"
 
@@ -169,7 +169,9 @@ export const Pedidos = () => {
             </div>
             <div className="w-full">
                 <section className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
-                    {Pedidos.map((pedido) => (
+                    {Pedidos.length === 0 ? (
+                        <EstadoVazio />
+                    ) : Pedidos.map((pedido) => (
                         <article key={pedido.id} className="record-card flex justify-between gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                             <div className="min-w-0 flex-1 space-y-1 wrap-break-words">
                                 <h2 className="text-lg font-bold">Pedido #{pedido.id}</h2>

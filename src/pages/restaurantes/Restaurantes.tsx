@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Modal } from "../../components"
+import { EstadoVazio, Modal } from "../../components"
 import { type ICampoFormulario, type Irestaurante } from "../../utils"
 import { metodosrestaurante } from "../../services"
 import { useToast, useToogle } from "../../hooks"
@@ -85,7 +85,9 @@ export const Restaurantes = () => {
                     </h1>
                 </div>
                 <section className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
-                    {Restaurantes?.map((restaurante) => (
+                    {Restaurantes === null ? null : Restaurantes.length === 0 ? (
+                        <EstadoVazio />
+                    ) : Restaurantes.map((restaurante) => (
                         <article key={restaurante.id} className="record-card flex justify-between gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                             <div className="min-w-0 flex-1 wrap-break-words">
                                 <h2 className="text-lg font-bold">{restaurante.nome}</h2>

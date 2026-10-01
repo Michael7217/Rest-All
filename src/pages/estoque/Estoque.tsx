@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import type { ICampoFormulario, Iestoque } from "../../utils"
-import { Modal } from "../../components"
+import { EstadoVazio, Modal } from "../../components"
 import { useAuth, useToast, useToogle } from "../../hooks"
 import { Trash } from "lucide-react"
 import { metodosestoque } from "../../services/metodos/Metodosestoque"
@@ -67,7 +67,10 @@ export const Estoque = () => {
         <div className="flex flex-col items-center">
             
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
-                {Estoque.map((produto) => (
+                {Estoque.length === 0 ? (
+                    <EstadoVazio />
+                ) :
+                Estoque.map((produto) => (
                     <article key={`${produto.id}-${produto.nomeProduto}`} className="record-card flex items-start justify-between gap-3 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                         <div className="min-w-0 flex-1 space-y-1 wrap-break-word">
                             <h2 className="text-lg font-bold">{produto.nomeProduto}</h2>

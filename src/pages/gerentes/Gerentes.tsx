@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useAuth, useToast, useToogle } from "../../hooks"
-import { Modal } from "../../components"
+import { EstadoVazio, Modal } from "../../components"
 import { metodosusuarios } from "../../services/metodos/Metodosusuarios"
 import type { Idadosretornados } from "../../utils/interfaces/Idadosretornados"
 import type { ICampoFormulario, Iregistro } from "../../utils"
@@ -100,7 +100,9 @@ export const Gerentes = () => {
                 </h1>
             </div>
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
-                {Gerentes?.map((gerente) => (
+                {Gerentes === undefined ? null : Gerentes.length === 0 ? (
+                    <EstadoVazio />
+                ) : Gerentes.map((gerente) => (
                     <article key={gerente.id ?? gerente.nome} className="record-card flex flex-col gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                         <div className="flex justify-between gap-2">
                             <div className="min-w-0 flex-1 wrap-break-word">

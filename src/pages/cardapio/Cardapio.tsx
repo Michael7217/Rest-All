@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import type { ICampoFormulario, Icardapio, Icardapioformulario, Irestaurante } from "../../utils"
 import { metodoscardapio, metodosrestaurante } from "../../services"
-import { Modal } from "../../components"
+import { EstadoVazio, Modal } from "../../components"
 import { useAuth, useToast, useToogle } from "../../hooks"
 import { ArrowRight, PenIcon, Trash } from "lucide-react"
 import { useNavigate } from "react-router-dom"
@@ -136,7 +136,10 @@ export const Cardapio = () => {
         </div>
         <div className="flex flex-col items-center">
             {!islogged ? (<section className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
-                    {Restaurantespublico?.map((restaurante) => (
+                    {Restaurantespublico.length === 0 ? (
+                        <EstadoVazio />
+                    ) :
+                    Restaurantespublico.map((restaurante) => (
                         <article key={restaurante.id} className="record-card flex justify-between gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                             <div className="min-w-0 flex-1 wrap-break-words flex flex-col">
                                 <h2 className="text-lg font-bold">{restaurante.nome}</h2>
@@ -160,7 +163,10 @@ export const Cardapio = () => {
                     ))}
                 </section>) : 
                 (<section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
-                {Cardapio.map((prato) => (
+                {Cardapio.length === 0 ? (
+                    <EstadoVazio />
+                ) :
+                Cardapio.map((prato) => (
                     <article key={`${prato.id}-${prato.nome}`} className="record-card flex flex-col gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                         {prato.imagem && (
                             <img
