@@ -113,7 +113,7 @@ export const Modal = <T, R = unknown,>({
                                     name={campo.nome}
                                     value={typeof Form[campo.nome] === "string" ? Form[campo.nome] as string : ""}
                                     onChange={handlechange}
-                                    required
+                                    required={campo.obrigatorio !== false}
                                     className="w-full rounded-2xl bg-white p-2"
                                 >
                                     <option value="" disabled>{campo.placeholder}</option>
@@ -135,7 +135,7 @@ export const Modal = <T, R = unknown,>({
                                         : typeof Form[campo.nome] === "string" ? Form[campo.nome] as string : ""}
                                     onChange={handlechange}
                                     readOnly={campo.somenteLeitura}
-                                    required={!campo.somenteLeitura && !(campo.tipo === "file" && modoEdicao)}
+                                    required={campo.obrigatorio !== false && !campo.somenteLeitura && !(campo.tipo === "file" && modoEdicao)}
                                     className={campo.somenteLeitura ? "bg-gray-200 text-gray-600" : undefined}
                                 />
                             )}

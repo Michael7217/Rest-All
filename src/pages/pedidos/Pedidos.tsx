@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react"
-import type { ICampoFormulario, IPedido, Tstatuspedidos } from "../../utils"
-import { metodospedidos } from "../../services"
+import type { ICampoFormulario, Icardapio, IComanda, IPedido, Tstatuspedidos } from "../../utils"
+import { metodoscardapio, metodoscomandas, metodospedidos } from "../../services"
 import { Modal } from "../../components"
 import { useAuth, useToast, useToogle } from "../../hooks"
 import { ListChecks, PenIcon, Trash } from "lucide-react"
 
-const campos: ICampoFormulario[] = [
+const camposEdicao: ICampoFormulario[] = [
     { nome: "comandaId", rotulo: "ID da Comanda", tipo: "number", placeholder: "ex: 1", parse: (valor) => Number(valor) },
     { nome: "itemId", rotulo: "ID do Item", tipo: "number", placeholder: "ex: 1", parse: (valor) => Number(valor) },
     { nome: "quantidade", rotulo: "Quantidade", tipo: "number", placeholder: "ex: 1", parse: (valor) => Number(valor) },
-    { nome: "observacao", rotulo: "Observação", placeholder: "ex: carne bem passada" }
+    { nome: "observacao", rotulo: "Observação", placeholder: "ex: carne bem passada", obrigatorio: false }
 ]
 
 const camposStatus: ICampoFormulario[] = [
@@ -29,6 +29,9 @@ const camposStatus: ICampoFormulario[] = [
 
 export const Pedidos = () => {
     const [Pedidos, setPedidos] = useState<IPedido[]>([])
+    const [ComandasAbertas, setComandasAbertas] = useState<IComanda[]>([])
+    const [ItensCardapio, setItensCardapio] = useState<Icardapio[]>([])
+    const [carregandoOpcoes, setCarregandoOpcoes] = useState(true)
     const { isActive, handletoogle } = useToogle()
     const { usuario } = useAuth()
     const { showToast } = useToast()
@@ -47,6 +50,60 @@ export const Pedidos = () => {
         }
         listarpedidos()
     }, [showToast])
+
+    useEffect(() => {
+        const carregarOpcoesPedido = async () => {
+            const [comandas, itens] = await Promise.all([
+                metodoscomandas.listar(),
+                metodoscardapio.listar(),
+            ])
+
+            if (typeof comandas === "string") {
+                showToast(comandas, "error")
+            } else {
+                setComandasAbertas(comandas.filter((comanda) =>
+                    comanda.status.trim().toUpperCase() === "ABERTA" && comanda.id !== undefined,
+                ))
+            }
+
+            if (typeof itens === "string") {
+                showToast(itens, "error")
+            } else {
+                setItensCardapio(itens.filter((item) => item.id !== undefined))
+            }
+
+            setCarregandoOpcoes(false)
+        }
+
+        void carregarOpcoesPedido()
+    }, [showToast])
+
+    const camposAdicao: ICampoFormulario[] = [
+        {
+            nome: "comandaId",
+            rotulo: "Comanda",
+            tipo: "select",
+            placeholder: ComandasAbertas.length ? "Selecione uma comanda aberta" : "Nenhuma comanda aberta disponível",
+            opcoes: ComandasAbertas.map((comanda) => ({
+                valor: String(comanda.id),
+                rotulo: `Comanda ${comanda.numero} - Mesa ${comanda.mesa}`,
+            })),
+            parse: (valor) => Number(valor),
+        },
+        {
+            nome: "itemId",
+            rotulo: "Item",
+            tipo: "select",
+            placeholder: ItensCardapio.length ? "Selecione um item" : "Nenhum item disponível",
+            opcoes: ItensCardapio.map((item) => ({
+                valor: String(item.id),
+                rotulo: `${item.id} - ${item.nome}`,
+            })),
+            parse: (valor) => Number(valor),
+        },
+        { nome: "quantidade", rotulo: "Quantidade", tipo: "number", placeholder: "ex: 1", parse: (valor) => Number(valor) },
+        { nome: "observacao", rotulo: "Observação", placeholder: "ex: carne bem passada", obrigatorio: false },
+    ]
 
     const recarregar = async () => {
         const response = await metodospedidos.listar()
@@ -93,18 +150,19 @@ export const Pedidos = () => {
                     ? { ...pedidoEmEdicao, status: pedidoEmEdicao.status?.toUpperCase() }
                     : pedidoEmEdicao ?? undefined}
                 modoEdicao={pedidoEmEdicao !== null}
-                campos={editandoStatus ? camposStatus : campos}
+                campos={editandoStatus ? camposStatus : pedidoEmEdicao ? camposEdicao : camposAdicao}
                 aoCriar={recarregar}
             />
             <div className="relative flex w-full items-center mb-3.5">
                 {!isActive && (
                     <button
+                        disabled={carregandoOpcoes}
                         onClick={() => {
                             setPedidoEmEdicao(null)
                             setEditandoStatus(false)
                             handletoogle()
                         }}
-                        className="absolute right-0 shrink-0 cursor-pointer bg-white w-25 h-10 rounded-2xl border-2 border-red-500 text-red-500 font-bold"
+                        className="absolute right-0 shrink-0 cursor-pointer bg-white w-25 h-10 rounded-2xl border-2 border-red-500 text-red-500 font-bold disabled:cursor-wait disabled:opacity-60"
                     >Adicionar</button>
                 )}
                 <h1 className="w-full truncate pr-4 text-center text-xl text-red-500 font-bold sm:text-2xl">Pedidos</h1>
