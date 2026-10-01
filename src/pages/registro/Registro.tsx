@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { Autenticacao } from "../../components/autenticacao/Autenticacao"
 
 import { useState, type FormEvent } from "react"
-import type { Iregistro } from "../../utils"
+import type { Iproprietario } from "../../utils"
 import { metodosusuarios } from "../../services/metodos/Metodosusuarios"
 
 export const Registro = () => {
@@ -14,17 +14,18 @@ export const Registro = () => {
         event.preventDefault()
         const formdata = new FormData(event.currentTarget)
 
-        const dados: Iregistro = {
+        const dados: Iproprietario = {
             nome: String(formdata.get("nome")),
+            nomeRestaurante: String(formdata.get("nomeRestaurante")),
+            cnpj: String(formdata.get("cnpj")),
+            cpf: String(formdata.get("cpf")),
+            telefone: String(formdata.get("telefone")),
             email: String(formdata.get("email")),
             senha: String(formdata.get("senha")),
-            restauranteId: Number(formdata.get("restauranteId")),
-            cpf: String(formdata.get("cpf")),
-            cargo: String(formdata.get("cargo")),
-            telefone: String(formdata.get("telefone")),
         }
         try{
             setisLoadingregistro(true)
+            setErro(false)
             const response = await metodosusuarios.RegistrarProprietario(dados)
             if (typeof response !== "string") navigate("/login", {replace: true})
             else setErro(true)

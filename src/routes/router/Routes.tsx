@@ -14,7 +14,7 @@ export const Rotas = () => {
                 <Route path="/login" element={<Login/>}/>
                 <Route element={<Layout/>}>
                     <Route path="/" element={<Home/>}/>
-                        <Route path="/cardapio" element={<Cardapio/>}/>
+                    <Route path="/cardapio" element={<Cardapio/>}/>
                     <Route path="/cardapio/:Idrestaurante" element={<Cardapiopublico/>}/>
                 </Route>
                 // rotas privadas
@@ -25,7 +25,7 @@ export const Rotas = () => {
                         <Route path="/comandas" element={<Comandas/>}></Route>
                     </Route>
                 </Route>
-                <Route element={<AdminRoutes roles={["GERENTE", "DONO", "ADMINISTRADOR"]}/>}>
+                <Route element={<AdminRoutes roles={["GERENTE", "DONO"]}/>}>
                     <Route element={<Layout/>}>
                         <Route path="/funcionarios" element={<Funcionarios/>}/>
                         <Route path="/despesas" element={<Despesas/>}/>
@@ -34,14 +34,14 @@ export const Rotas = () => {
                         <Route path="/meu-restaurante" element={<Meurestaurante/>}/>
                     </Route>
                 </Route>
-                <Route element={<AdminRoutes roles={["DONO", "ADMINISTRADOR"]}/>}>
+                <Route element={<AdminRoutes roles={["DONO"]}/>}>
                     <Route element={<Layout/>}>
                         <Route path="/gerentes" element={<Gerentes/>}/>
-                        <Route path="/restaurantes" element={<Restaurantes/>}/>
                     </Route>
                 </Route>
                 <Route element={<AdminRoutes roles={["ADMINISTRADOR"]}/>}>
                     <Route element={<Layout/>}>
+                        <Route path="/restaurantes" element={<Restaurantes/>}/>
                         <Route path="/proprietarios" element={<Proprietarios/>}/>
                         <Route path="/registro" element={<Registro/>}/>
                     </Route>

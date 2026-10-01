@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import type { ICampoFormulario, Icardapio, Irestaurante } from "../../utils"
+import type { ICampoFormulario, Icardapio, Icardapioformulario, Irestaurante } from "../../utils"
 import { metodoscardapio, metodosrestaurante } from "../../services"
 import { Modal } from "../../components"
-import { useAuth, useToogle } from "../../hooks"
+import { useAuth, useToast, useToogle } from "../../hooks"
 import { ArrowRight, PenIcon, Trash } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
@@ -10,7 +10,7 @@ const campos: ICampoFormulario[] = [
     { nome: "nome", rotulo: "Nome", placeholder: "ex: vatapá" },
     { nome: "descricao", rotulo: "Descrição", placeholder: "prato da culinária paraense" },
     { nome: "categoria", rotulo: "Categoria", placeholder: "prato completo" },
-    { nome: "preco", rotulo: "Preço", tipo: "number", placeholder: "ex: 20.0", parse: (valor) => Number(valor) },
+    { nome: "preco", rotulo: "Preço", tipo: "number", placeholder: "ex: 20,00", parse: (valor) => Number(valor) },
     {
         nome: "disponivel",
         rotulo: "Disponibilidade",
@@ -22,7 +22,7 @@ const campos: ICampoFormulario[] = [
         ],
         parse: (valor) => valor === "true",
     },
-    { nome: "imagem", rotulo: "Imagem", placeholder: "ex: example.com/image" },
+    { nome: "imagem", tipo: "file", rotulo: "Imagem", placeholder: "ex: example.com/image" },
 ]
 
 
@@ -31,6 +31,7 @@ export const Cardapio = () => {
     const [Restaurantespublico, setRestaurantespublico] = useState<Partial<Irestaurante>[]>([])
     const {isActive, handletoogle} = useToogle()
     const {usuario, islogged} = useAuth()
+    const { showToast } = useToast()
     const podeExcluir = usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO"
     const [pratoEmEdicao, setPratoEmEdicao] = useState<Icardapio | null>(null)
     const navigate = useNavigate()
@@ -38,31 +39,47 @@ export const Cardapio = () => {
     useEffect(() => {
         const carregarcardapio = async () => {
             const response = await metodoscardapio.listar()
-            if (typeof response !== "string"){
-                setCardapio(response)
+            if (typeof response === "string") {
+                showToast(response, "error")
+                return
             }
+            setCardapio(response)
         }
+
         const carregarRestaurantes = async () => {
             const response = await metodosrestaurante.Listarrestaurantespublico()
-            if (typeof response !== "string"){
-                setRestaurantespublico(response)
+            if (typeof response === "string") {
+                showToast(response, "error")
+                return
             }
+            setRestaurantespublico(response)
         }
-        carregarcardapio()
-        carregarRestaurantes()
-    }, [])
+
+        if (!islogged) {
+            void carregarRestaurantes()
+            return
+        }
+
+        void carregarcardapio()
+    }, [islogged, showToast])
 
     
 
     const recarregar = async () => {
         const response = await metodoscardapio.listar()
-        if (typeof response !== "string"){
-            setCardapio(response)
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
         }
+        setCardapio(response)
     }
     const excluir = async (id: number) => {
         const response = await metodoscardapio.deletar(id)
-        if (typeof response !== "string") await recarregar()
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
+        }
+        await recarregar()
     }
 
     const fecharModal = () => {
@@ -70,10 +87,25 @@ export const Cardapio = () => {
         handletoogle()
     }
 
-    const editarPrato = (dados: Icardapio) => {
+    const editarPrato = (dados: Icardapioformulario) => {
         if (pratoEmEdicao?.id === undefined) return Promise.resolve("Prato sem ID")
-        return metodoscardapio.atualizarput(pratoEmEdicao.id, { ...dados, id: pratoEmEdicao.id })
+        return metodoscardapio.atualizarput(pratoEmEdicao.id, {
+            ...dados,
+            imagem: pratoEmEdicao.imagem,
+            id: pratoEmEdicao.id,
+        })
     }
+
+    const valoresIniciais = pratoEmEdicao
+        ? {
+            id: pratoEmEdicao.id,
+            nome: pratoEmEdicao.nome,
+            descricao: pratoEmEdicao.descricao,
+            categoria: pratoEmEdicao.categoria,
+            preco: pratoEmEdicao.preco,
+            disponivel: pratoEmEdicao.disponivel,
+        }
+        : undefined
 
     return (
         <>
@@ -83,7 +115,7 @@ export const Cardapio = () => {
             toogle={fecharModal}
             criar={metodoscardapio.criar}
             atualizar={editarPrato}
-            valoresIniciais={pratoEmEdicao ?? undefined}
+            valoresIniciais={valoresIniciais}
             modoEdicao={pratoEmEdicao !== null}
             campos={campos}
             aoCriar={recarregar}
@@ -142,8 +174,8 @@ export const Cardapio = () => {
                             <div className="min-w-0 flex-1 wrap-break-word">
                                 {islogged && <p>Id: {prato.id}</p>}
                                 <h2 className="font-bold text-xl">Nome: {prato.nome}</h2>
+                                <strong className="text-xl">Preço: R$ {prato.preco.toFixed(2)}</strong>
                                 <p><strong>Descrição:</strong> {prato.descricao}</p>
-                                <strong className="text-xl">R$ {prato.preco.toFixed(2)}</strong>
                                 <p><strong>Categoria:</strong> {prato.categoria}</p>
                                 <p><strong>Disponibilidade:</strong> {prato.disponivel ? "Disponível" : "Indisponível"}</p>
                             </div>

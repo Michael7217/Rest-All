@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useAuth, useToogle } from "../../hooks"
+import { useAuth, useToast, useToogle } from "../../hooks"
 import { Modal } from "../../components"
 import { metodosusuarios } from "../../services/metodos/Metodosusuarios"
 import type { Idadosretornados } from "../../utils/interfaces/Idadosretornados"
@@ -28,6 +28,7 @@ const camposEdicao: ICampoFormulario[] = [
 export const Gerentes = () => {
     const {isActive,handletoogle} = useToogle()
     const { usuario } = useAuth()
+    const { showToast } = useToast()
     const podeGerenciar = usuario?.perfil === "DONO"
     const [Gerentes, setGerentes] = useState<Idadosretornados[]>()
     const [gerenteEmEdicao, setGerenteEmEdicao] = useState<Idadosretornados | null>(null)
@@ -35,18 +36,30 @@ export const Gerentes = () => {
     useEffect(() => {
         const carregargerentes = async () => {
             const response = await metodosusuarios.ListarGerentes()
-            if (typeof response !== "string") setGerentes(response)
+            if (typeof response === "string") {
+                showToast(response, "error")
+                return
+            }
+            setGerentes(response)
         }
         carregargerentes()
-    }, [])
+    }, [showToast])
 
     const recarregar = async () => {
         const response = await metodosusuarios.ListarGerentes()
-        if (typeof response !== "string") setGerentes(response)
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
+        }
+        setGerentes(response)
     }
     const excluir = async (id: number) => {
         const response = await metodosusuarios.DeletarGerente(id)
-        if (typeof response !== "string") await recarregar()
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
+        }
+        await recarregar()
     }
 
     const fecharModal = () => {
@@ -56,7 +69,7 @@ export const Gerentes = () => {
 
     const editarGerente = (dados: Iregistro) => {
         if (gerenteEmEdicao?.id === undefined) return Promise.resolve("Gerente sem ID")
-        return metodosusuarios.EditarGerente(gerenteEmEdicao.id, dados)
+        return metodosusuarios.EditarPerfil(gerenteEmEdicao.id, dados)
     }
 
     return (
@@ -88,7 +101,7 @@ export const Gerentes = () => {
             </div>
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Gerentes?.map((gerente) => (
-                    <article key={gerente.nome} className="record-card flex flex-col gap-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
+                    <article key={gerente.id ?? gerente.nome} className="record-card flex flex-col gap-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
                         <div className="flex justify-between gap-2">
                             <div className="min-w-0 flex-1 wrap-break-word">
                                 <h2 className="font-bold text-xl">{gerente.nome}</h2>

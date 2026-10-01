@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
 import { type Icardapio } from "../../utils"
 import { metodoscardapio } from "../../services"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
+import { ArrowLeft } from "lucide-react"
+
 
 export const Cardapiopublico = () => {
     const [Cardapiopublico, setCardapiopublico] = useState<Icardapio[]>([])
     const {Idrestaurante} = useParams<{Idrestaurante: string}>()
+    const navigate = useNavigate()
     useEffect(() => {
         
         const Carregarcardapiopublico = async () => {
@@ -21,13 +24,18 @@ export const Cardapiopublico = () => {
     return (
         <>
         <div className="relative flex w-full items-center mb-3.5">
+            <button className="cursor-pointer p-1 rounded-2xl bg-red-500" onClick={() => {
+                    navigate(-1)
+            }}>
+                <ArrowLeft color="white"/>
+            </button>
             <h1 className="w-full truncate pr-4 text-center text-xl text-red-500 font-bold sm:text-2xl">
                 Cardápio
             </h1>
         </div>
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
-                {Cardapiopublico.map((prato) => (
-                    <article key={`${prato.id}-${prato.nome}`} className="record-card flex flex-col gap-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
+                {Cardapiopublico.map((prato) => ( 
+                    <article key={`${prato.id}-${prato.nome}`} className="record-card flex flex-col gap-2 rounded-2xl border-2 border-white p-4 bg-red-500 text-white">
                         {prato.imagem && (
                             <img
                                 src={prato.imagem}
@@ -44,10 +52,6 @@ export const Cardapiopublico = () => {
                                 <p><strong>Categoria:</strong> {prato.categoria}</p>
                                 <p><strong>Disponibilidade:</strong> {prato.disponivel ? "Disponível" : "Indisponível"}</p>
                             </div>
-                            
-                                
-                            
-                            
                         </div>
                     </article>
                 ))}

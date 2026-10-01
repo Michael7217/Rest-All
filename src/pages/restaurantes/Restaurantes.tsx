@@ -80,15 +80,6 @@ export const Restaurantes = () => {
             />
             <div className="w-full">
                 <div className="relative flex w-full items-center mb-3.5">
-                    {!isActive && (
-                        <button
-                            onClick={() => {
-                                setRestauranteEmEdicao(null)
-                                handletoogle()
-                            }}
-                            className="absolute right-0 shrink-0 cursor-pointer bg-white w-25 h-10 rounded-2xl border-2 border-red-500 text-red-500 font-bold"
-                        >Adicionar</button>
-                    )}
                     <h1 className="w-full text-center text-xl font-bold text-red-500 sm:text-2xl">
                         Restaurantes
                     </h1>

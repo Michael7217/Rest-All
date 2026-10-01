@@ -1,4 +1,4 @@
-import { Verifica, type Icardapio } from "../../utils"
+import { Verifica, type Icardapio, type Icardapioformulario } from "../../utils"
 import { Api } from "../api/Api"
 
 const listarcardapio = async () => {
@@ -39,16 +39,27 @@ const atualizarcardapiopid = async (id: number, cardapio: Icardapio) => {
 
 const buscarcardapioid = async (id: number) => {
     try {
-        const response = await Api().get<Icardapio>(`/cardapio/${id}`)
+        const response = await Api().get<Icardapio>(`/api/cardapio/${id}`)
         return response.data
     } catch (error) {
         return Verifica(error)
     }
 }
 
-const criarcardapio = async (cardapio: Icardapio) => {
+const criarcardapio = async (cardapio: Icardapioformulario) => {
     try {
-        const response = await Api().post<Icardapio>("/api/cardapio", cardapio)
+        const formData = new FormData()
+        formData.append("imagem", cardapio.imagem)
+
+        const response = await Api().post<Icardapio>("/api/cardapio", formData, {
+            params: {
+                nome: cardapio.nome,
+                descricao: cardapio.descricao,
+                categoria: cardapio.categoria,
+                preco: cardapio.preco,
+                disponivel: cardapio.disponivel,
+            },
+        })
         return response
     } catch (error) {
         return Verifica(error)

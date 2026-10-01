@@ -2,9 +2,9 @@ import { Verifica } from "../../utils"
 import type { Irestaurante } from "../../utils"
 import { Api } from "../api/Api"
 
-const Listarrestaurantes = async () => { //apenas admin
+const Meurestaurante = async () => { //apenas admin
     try{
-        const response = await Api().get<Irestaurante[]>("/restaurantes")
+        const response = await Api().get<Irestaurante>("/restaurantes/meu-restaurante")
         return response.data
     }catch(error){
         return Verifica(error)
@@ -13,6 +13,14 @@ const Listarrestaurantes = async () => { //apenas admin
 const Listarrestaurantespublico = async () => { //publico
     try{
         const response = await Api().get<Partial<Irestaurante>[]>("/restaurantes/publico")
+        return response.data
+    }catch(error){
+        return Verifica(error)
+    }
+}
+const Listarrestaurantes = async () => { //publico
+    try{
+        const response = await Api().get<Irestaurante[]>("/restaurantes")
         return response.data
     }catch(error){
         return Verifica(error)
@@ -27,7 +35,7 @@ const Editarrestaurantes = async (dados: Irestaurante) => { //apenas admin
         return Verifica(error)
     }
 }
-const Editarrestaurantesall = async (dados: Irestaurante) => { //apenas dono
+const Editarrestaurante = async (dados: Irestaurante) => { //apenas dono
     try{
         const response = await Api().put<Irestaurante>(`/restaurantes/meu-restaurante`, dados)
         return response.data
@@ -39,8 +47,9 @@ const Editarrestaurantesall = async (dados: Irestaurante) => { //apenas dono
 
 
 export const metodosrestaurante = {
-    Listarrestaurantes: Listarrestaurantes,
+    Meurestaurante: Meurestaurante,
     Listarrestaurantespublico: Listarrestaurantespublico,
+    Listarrestaurantes: Listarrestaurantes,
     Editarrestaurantes: Editarrestaurantes,
-    Editarrestaurantesall: Editarrestaurantesall
+    Editarrestaurante: Editarrestaurante
 }

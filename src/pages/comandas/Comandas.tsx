@@ -3,12 +3,35 @@ import { Modal, Modaldetalhes } from "../../components"
 import type { IPedido, ICampoFormulario, IComanda } from "../../utils"
 import { useAuth, useToast, useToogle } from "../../hooks"
 import { metodoscomandas, metodospedidos } from "../../services"
-import { Eye, Trash } from "lucide-react"
+import { Eye, ListChecks, Trash } from "lucide-react"
 
 const campos: ICampoFormulario[] = [
-    { nome: "numero", rotulo: "Número", placeholder: "ex: 1" },
-    { nome: "mesa", rotulo: "Mesa", placeholder: "ex: 1" },
-    { nome: "status", rotulo: "status", placeholder: "ex: Aberta", parse: (valor) => valor.trim().toLowerCase() === "aberta" }
+    { nome: "numero", rotulo: "Número", tipo: "number", placeholder: "ex: 1", parse: (valor) => Number(valor) },
+    { nome: "mesa", rotulo: "Mesa", tipo: "number", placeholder: "ex: 1", parse: (valor) => Number(valor) },
+    {
+        nome: "status",
+        rotulo: "Status",
+        placeholder: "Selecione o status",
+        tipo: "select",
+        opcoes: [
+            { valor: "ABERTA", rotulo: "Aberta" },
+            { valor: "FECHADA", rotulo: "Fechada" },
+        ],
+        parse: (valor) => valor.trim().toUpperCase(),
+    },
+]
+
+const camposStatus: ICampoFormulario[] = [
+    {
+        nome: "status",
+        rotulo: "Status da comanda",
+        tipo: "select",
+        placeholder: "Selecione um status",
+        opcoes: [
+            { valor: "ABERTA", rotulo: "Aberta" },
+            { valor: "FECHADA", rotulo: "Fechada" },
+        ],
+    },
 ]
 export const Comandas = () => {
     const [Comandas, setComandas] = useState<IComanda[]>([])
@@ -18,26 +41,60 @@ export const Comandas = () => {
     const podeExcluir = usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO"
     const [Comandadetalhes, setComandadetalhes] = useState<IComanda | null>(null)
     const [Pedidoscomanda, setPedidoscomandas] = useState<IPedido[] | null>(null)
+    const [comandaEmEdicao, setComandaEmEdicao] = useState<IComanda | null>(null)
+    const [editandoStatus, setEditandoStatus] = useState(false)
     
     useEffect(() => {
         const carregarComandas = async () => {
             const response = await metodoscomandas.listar()
-            if (typeof response !== "string"){
-                setComandas(response)
+            if (typeof response === "string") {
+                showToast(response, "error")
+                return
             }
+            setComandas(response)
         }
         carregarComandas()
-    }, [])
+    }, [showToast])
     
     const recarregar = async () => {
             const response = await metodoscomandas.listar()
-            if (typeof response !== "string"){
-                setComandas(response)
+            if (typeof response === "string") {
+                showToast(response, "error")
+                return
             }
+            setComandas(response)
         }
     const excluir = async (id: number) => {
         const response = await metodoscomandas.deletar(id)
-        if (typeof response !== "string") await recarregar()
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
+        }
+        await recarregar()
+    }
+
+    const fecharModal = () => {
+        setComandaEmEdicao(null)
+        setEditandoStatus(false)
+        handletoogle()
+    }
+
+    const editarComanda = (dados: IComanda) => {
+        if (comandaEmEdicao?.id === undefined) return Promise.resolve("Comanda sem ID")
+        if (editandoStatus) {
+            if (!dados.status) return Promise.resolve("Selecione um status")
+            return metodoscomandas.atualizarput(comandaEmEdicao.id, {
+                ...comandaEmEdicao,
+                ...dados,
+                id: comandaEmEdicao.id,
+                status: String(dados.status).toUpperCase(),
+            })
+        }
+        return metodoscomandas.atualizarput(comandaEmEdicao.id, {
+            ...comandaEmEdicao,
+            ...dados,
+            id: comandaEmEdicao.id,
+        })
     }
 
     const Abrircomanda = async (comanda: IComanda) => {
@@ -63,7 +120,19 @@ export const Comandas = () => {
 
     return (
         <>
-        <Modal isActive={isActive} toogle={handletoogle} criar={metodoscomandas.criar} campos={campos} aoCriar={recarregar}/>
+        <Modal
+            key={`${isActive}-${comandaEmEdicao?.id ?? "novo"}-${editandoStatus}`}
+            isActive={isActive}
+            toogle={fecharModal}
+            criar={metodoscomandas.criar}
+            atualizar={editarComanda}
+            valoresIniciais={editandoStatus && comandaEmEdicao
+                ? { ...comandaEmEdicao, status: comandaEmEdicao.status?.toUpperCase() }
+                : comandaEmEdicao ?? undefined}
+            modoEdicao={comandaEmEdicao !== null}
+            campos={editandoStatus ? camposStatus : campos}
+            aoCriar={recarregar}
+        />
         <Modaldetalhes
             aberto={Comandadetalhes !== null}
             titulo={Comandadetalhes ? `Comanda ${Comandadetalhes.numero}` : "Detalhes da comanda"}
@@ -82,7 +151,7 @@ export const Comandas = () => {
                 },
                 {
                     rotulo: "Total",
-                    valor: `R$ ${Comandadetalhes.valorTotal.toFixed(2)}`,
+                    valor: `R$ ${Comandadetalhes.valorTotal?.toFixed(2)}`,
                 },
                 {
                     rotulo: "Pedidos",
@@ -124,14 +193,29 @@ export const Comandas = () => {
                         <div className="min-w-0 flex-1 wrap-break-words">
                         <h2 className="font-bold text-xl">Comanda: {comanda.numero}</h2>
                         <p>Mesa: {comanda.mesa}</p>
-                        <strong className="text-xl">Total: R$ {comanda.valorTotal.toFixed(2)}</strong>
+                        <strong className="text-xl">Total: R$ {comanda.valorTotal?.toFixed(2)}</strong>
                         <p>ID Funcionário: {comanda.funcionarioId}</p>
-                        <p>Status: {comanda.status ? "Aberta" : "Fechada"}</p>
+                        <p>Status: {comanda.status?.toLowerCase() === "aberta" ? "Aberta" : "Fechada"}</p>
                         <p>Data de abertura: {comanda.dataAbertura}</p>
                         <p>Data de fechamento: {comanda.dataFechamento}</p>
                         </div>
                         <div className="flex shrink-0 flex-col items-center justify-around gap-4">
                             <button onClick={() => Abrircomanda(comanda)} aria-label="Ver detalhes"><Eye className="cursor-pointer"/></button>
+                            {podeExcluir && comanda.id !== undefined && (
+                                <button
+                                    type="button"
+                                    aria-label="Alterar status da comanda"
+                                    title="Alterar status da comanda"
+                                    className="cursor-pointer"
+                                    onClick={() => {
+                                        setComandaEmEdicao(comanda)
+                                        setEditandoStatus(true)
+                                        handletoogle()
+                                    }}
+                                >
+                                    <ListChecks />
+                                </button>
+                            )}
                         {podeExcluir && comanda.id !== undefined && 
                             <button onClick={()=> excluir(comanda.id!)} className="cursor-pointer" aria-label="Excluir comanda"><Trash/></button>
                         }

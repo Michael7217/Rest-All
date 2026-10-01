@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import type { ICampoFormulario, Idespesa } from "../../utils"
 import { Modal } from "../../components"
-import { useAuth, useToogle } from "../../hooks"
+import { useAuth, useToast, useToogle } from "../../hooks"
 import { PenIcon, Trash } from "lucide-react"
 import { metodosdespesas } from "../../services/metodos/Metodosdespesas"
 
@@ -17,28 +17,37 @@ export const Despesas = () => {
     const [Despesas, setDespesas] = useState<Idespesa[]>([])
     const {isActive, handletoogle} = useToogle()
     const { usuario } = useAuth()
+    const { showToast } = useToast()
     const podeExcluir = usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO"
     const [despesaEmEdicao, setDespesaEmEdicao] = useState<Idespesa | null>(null)
 
     useEffect(() => {
         const carregarcardapio = async () => {
             const response = await metodosdespesas.listar()
-            if (typeof response !== "string"){
-                setDespesas(response)
+            if (typeof response === "string") {
+                showToast(response, "error")
+                return
             }
+            setDespesas(response)
         }
         carregarcardapio()
-    }, [])
+    }, [showToast])
 
     const recarregar = async () => {
         const response = await metodosdespesas.listar()
-        if (typeof response !== "string"){
-            setDespesas(response)
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
         }
+        setDespesas(response)
     }
     const excluir = async (id: number) => {
         const response = await metodosdespesas.deletar(id)
-        if (typeof response !== "string") await recarregar()
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
+        }
+        await recarregar()
     }
 
     const fecharModal = () => {
@@ -86,8 +95,8 @@ export const Despesas = () => {
                         <div className="min-w-0 flex-1 wrap-break-word">
                             <strong className="text-xl">Valor: R$ {despesa.valor.toFixed(2)}</strong>
                             <h2 className="font-bold text-xl">{despesa.descricao}</h2>
-                            <p>{despesa.categoria}</p>
-                            <p><strong>Categoria:</strong> {despesa.dataDespesa}</p>
+                            <p><strong>Categoria:</strong> {despesa.categoria}</p>
+                            <p><strong>Data:</strong> {despesa.dataDespesa}</p>
                         </div>
                         {podeExcluir && despesa.id !== undefined && (
                             <div className="flex shrink-0 flex-col justify-around gap-3">

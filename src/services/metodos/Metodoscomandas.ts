@@ -41,9 +41,8 @@ const buscarcomandaid = async (id: number) => {
 }
 
 const criarcomanda = async (comanda: IComanda) => {
-    const {id, funcionarioId, dataAbertura, dataFechamento, valorTotal, ...enviocomanda} = comanda
     try {
-        const response = await Api().post<IComanda>("/api/comandas", enviocomanda)
+        const response = await Api().post<IComanda>("/api/comandas", comanda)
         return response
     } catch (error) {
         return Verifica(error)

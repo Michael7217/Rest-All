@@ -1,46 +1,60 @@
 import { useEffect, useState } from "react"
 import { Modal } from "../../components"
-import { useToogle } from "../../hooks"
+import { useToast, useToogle } from "../../hooks"
 import { metodosusuarios } from "../../services/metodos/Metodosusuarios"
 import type { ICampoFormulario } from "../../utils"
 import type { Idadosretornados } from "../../utils/interfaces/Idadosretornados"
 import { Trash } from "lucide-react"
 
 const campos: ICampoFormulario[] = [
+    { nome: "nomeRestaurante", rotulo: "Nome do Restaurante", placeholder: "ex: Nome do Restaurante" },
+    { nome: "cnpj", rotulo: "CNPJ", placeholder: "ex: 999999999-99" },
     { nome: "nome", rotulo: "Nome", placeholder: "nome" },
     { nome: "cpf", rotulo: "CPF", placeholder: "ex: 999999999-99" },
     { nome: "email", rotulo: "Email", placeholder: "example@example.com", regex: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/ },
     { nome: "senha", rotulo: "Senha", placeholder: "6 Digitos", regex: /^.{6,}$/ },
-    { nome: "cargo", rotulo: "Cargo", placeholder: "ex: Proprietário" },
     { nome: "telefone", rotulo: "Telefone", placeholder: "ex: 99 999999999" },
-    { nome: "restauranteId", rotulo: "ID do Restaurante", tipo: "number", placeholder: "ex: 1", parse: (valor) => Number(valor) },
 ]
 
 export const Proprietarios = () => {
     const { isActive, handletoogle } = useToogle()
+    const { showToast } = useToast()
     const [proprietarios, setProprietarios] = useState<Idadosretornados[]>([])
 
     useEffect(() => {
         const carregarProprietarios = async () => {
             const response = await metodosusuarios.ListarProprietarios()
-            if (typeof response !== "string") setProprietarios(response)
+            if (typeof response === "string") {
+                showToast(response, "error")
+                return
+            }
+            setProprietarios(response)
         }
         carregarProprietarios()
-    }, [])
+    }, [showToast])
 
     const recarregar = async () => {
         const response = await metodosusuarios.ListarProprietarios()
-        if (typeof response !== "string") setProprietarios(response)
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
+        }
+        setProprietarios(response)
     }
 
     const excluir = async (id: number) => {
         const response = await metodosusuarios.DeletarProprietario(id)
-        if (typeof response !== "string") await recarregar()
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
+        }
+        await recarregar()
     }
 
     return (
         <>
             <Modal
+                key={String(isActive)}
                 isActive={isActive}
                 toogle={handletoogle}
                 criar={metodosusuarios.RegistrarProprietario}

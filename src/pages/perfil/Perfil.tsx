@@ -4,7 +4,7 @@ import { metodosbuscadados } from "../../services"
 import type { ICampoFormulario } from "../../utils"
 import type { Idadosretornados } from "../../utils/interfaces/Idadosretornados"
 import { Pen } from "lucide-react"
-import { useToogle } from "../../hooks"
+import { useToast, useToogle } from "../../hooks"
 import { Modal } from "../../components"
 import { metodosusuarios } from "../../services/metodos/Metodosusuarios"
 
@@ -23,22 +23,32 @@ const camposPerfil: ICampoFormulario[] = [
 export const Perfil = () => {
     const [Dados, setDados] = useState<Idadosretornados>()
     const { isActive, handletoogle } = useToogle()
+    const { showToast } = useToast()
 
     const recarregar = async () => {
         const response = await metodosbuscadados.buscardados()
-        if (typeof response !== "string") setDados(response)
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
+        }
+        setDados(response)
     }
 
     useEffect(() => {
         let ativo = true
         metodosbuscadados.buscardados().then((response) => {
-            if (ativo && typeof response !== "string") setDados(response)
+            if (!ativo) return
+            if (typeof response === "string") {
+                showToast(response, "error")
+                return
+            }
+            setDados(response)
         })
 
         return () => {
             ativo = false
         }
-    }, [])
+    }, [showToast])
 
     const atualizarPerfil = (dados: Partial<Idadosretornados>) => {
         if (Dados?.id === undefined) return Promise.resolve("ID do perfil não encontrado")

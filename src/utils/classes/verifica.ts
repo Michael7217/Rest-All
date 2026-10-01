@@ -2,8 +2,8 @@ import axios from "axios";
 
 export const Verifica = (Error: unknown) => {
     if(axios.isAxiosError(Error)){
-            const dados = Error.response?.data as { message?: string } | undefined
-            return dados?.message ?? Error.message
+            const dados = Error.response?.data as { mensagem?: string; message?: string; title?: string } | undefined
+            return dados?.mensagem ?? dados?.message ?? dados?.title ?? Error.message
         }else{
             return "erro inesperado"
         }

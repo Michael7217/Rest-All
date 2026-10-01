@@ -52,7 +52,7 @@ const atualizarpedidoput = async (
     pedido: IPedido,
 ) => {
     try {
-        const response = await Api().put<IPedido>(`/pedidos/${id}`, pedido)
+        const response = await Api().put<IPedido>(`/api/pedidos/${id}`, pedido)
         return response
     } catch (error) {
         return Verifica(error)
@@ -61,7 +61,7 @@ const atualizarpedidoput = async (
 
 const buscarpedidoid = async (id: number) => {
     try {
-        const response = await Api().get<IPedido>(`/api/pedidos${id}`)
+        const response = await Api().get<IPedido>(`/api/pedidos/${id}`)
         return response.data
     } catch (error) {
         return Verifica(error)

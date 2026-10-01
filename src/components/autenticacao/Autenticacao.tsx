@@ -10,7 +10,7 @@ interface Iautenticacaoprops {
 }
 export const Autenticacao = ({isLoading, Erro, metodo}: Iautenticacaoprops) => {
     const {pathname} = useLocation()
-    const isCadastro = pathname === "/proprietarios"
+    const isCadastro = pathname === "/registro"
     const inputClass = "w-full min-w-0 border-2 p-2 placeholder:text-gray-700 border-white bg-white rounded-2xl h-14"
 
     return (
@@ -23,7 +23,8 @@ export const Autenticacao = ({isLoading, Erro, metodo}: Iautenticacaoprops) => {
                 <form className={`w-full ${isCadastro ? "grid grid-cols-1 gap-3 px-2 md:grid-cols-2 md:px-4" : "flex flex-col gap-3 px-2 sm:px-4"}`} name={isCadastro ? "registro" : "login"} onSubmit={metodo}>
                     {isCadastro && <>
                         <input className={inputClass} name="nome" type="text" placeholder="Nome completo" required />
-                        <input className={inputClass} name="restauranteId" type="number" placeholder="ID do restaurante" required />
+                        <input className={inputClass} name="nomeRestaurante" type="text" placeholder="Nome do restaurante" required />
+                        <input className={inputClass} name="cnpj" type="text" placeholder="CNPJ (opcional)" />
                         <input className={inputClass} name="cpf" type="text" placeholder="CPF" required />
                         <input className={inputClass} name="telefone" type="tel" placeholder="Telefone" required />
                     </>}

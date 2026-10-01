@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { Loader2 } from "lucide-react"
 import type { IModalProps } from "../../utils"
@@ -23,19 +23,33 @@ export const Modal = <T, R = unknown,>({
     const emGrade = (titulo === "funcionarios" || titulo === "pedidos")
         && !(modoEdicao && campos.length === 1)
     const [IsLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        if (!isActive) return
+        const fecharComEscape = (e: KeyboardEvent) => {
+            if (e.key === "Escape") toogle?.()
+        }
+        window.addEventListener("keydown", fecharComEscape)
+        return () => window.removeEventListener("keydown", fecharComEscape)
+    }, [isActive, toogle])
+
     const inicial = () => {
         const valores = valoresIniciais as Record<string, unknown> | undefined
         return Object.fromEntries(
-            campos.map((campo): [string, string] => {
+            campos.map((campo): [string, string | undefined] => {
+                if (campo.tipo === "file") return [campo.nome, undefined]
                 const valor = valores?.[campo.nome]
                 return [campo.nome, valor == null ? "" : String(valor)]
             }),
-        ) as Record<string, string>
+        ) as Record<string, string | File | undefined>
     }
-    const [Form, setForm] = useState<Record<string, string>>(inicial)
+    const [Form, setForm] = useState<Record<string, string | File | undefined>>(inicial)
     
     const handlechange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target
+        const { name } = e.target
+        const value = e.target instanceof HTMLInputElement && e.target.type === "file"
+            ? e.target.files?.[0]
+            : e.target.value
         setForm((prev) => ({
                 ...prev,
                 [name]: value,
@@ -44,9 +58,10 @@ export const Modal = <T, R = unknown,>({
 
     const Handlesubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault()
-            const campoinvalido = campos.find((campo) => (
-                campo.regex && !campo.regex.test(Form[campo.nome] ?? "")
-            ))
+            const campoinvalido = campos.find((campo) => {
+                const valor = Form[campo.nome]
+                return campo.regex && !campo.regex.test(typeof valor === "string" ? valor : "")
+            })
             if (campoinvalido !== undefined){
                 showToast(`O campo ${campoinvalido.rotulo} é inválido`, "error")
                 return
@@ -54,10 +69,13 @@ export const Modal = <T, R = unknown,>({
             setIsLoading(true)
 
             const dados = Object.fromEntries(
-                campos.filter((campo) => !campo.somenteLeitura).map((campo): [string, unknown] => [
-                    campo.nome,
-                    campo.parse ? campo.parse(Form[campo.nome]) : Form[campo.nome],
-                ]),
+                campos.filter((campo) => !campo.somenteLeitura).map((campo): [string, unknown] => {
+                    const valor = Form[campo.nome]
+                    return [
+                        campo.nome,
+                        campo.parse && typeof valor === "string" ? campo.parse(valor) : valor,
+                    ]
+                }),
             ) as T
             
             
@@ -83,9 +101,9 @@ export const Modal = <T, R = unknown,>({
     return (
         <div className={`${isActive ? "fixed" : "hidden"} inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/40 p-4`}>
             <div className="my-auto w-[80%] max-w-full rounded-2xl bg-red-500 md:w-[55%]">
-            <form onSubmit={Handlesubmit} className={`max-h-[calc(100dvh-2rem)] overflow-y-auto items-start bg-red-500 p-4 gap-1 rounded-2xl [&_h1]:text-center
+            <form onSubmit={Handlesubmit} role="dialog" aria-modal="true" aria-labelledby="titulo-modal" className={`max-h-[calc(100dvh-2rem)] overflow-y-auto items-start bg-red-500 p-4 gap-1 rounded-2xl [&_h1]:text-center
             [&_input]:bg-white [&_input]:placeholder-gray-500 [&_input]:rounded-2xl [&_input]:w-full [&_input]:p-2 [&_label]:text-white`}>
-                <h1 className="text-white font-bold self-center text-xl">{modoEdicao ? `Editar ${titulo}` : titulo === "comandas" || titulo === "pedidos" ? `Adicionar ${titulo}` : `Adicionar no ${titulo}`}</h1>
+                <h1 id="titulo-modal" className="text-white font-bold self-center text-xl">{modoEdicao ? `Editar ${titulo}` : titulo === "comandas" || titulo === "pedidos" ? `Adicionar ${titulo}` : `Adicionar no ${titulo}`}</h1>
                 <div className={`flex flex-col w-full gap-y-1 ${emGrade ? "md:grid md:grid-cols-2 md:gap-x-4" : ""}`}>
                     {campos.map((campo) => (
                         <div key={campo.nome} className="flex flex-col gap-1">
@@ -93,7 +111,7 @@ export const Modal = <T, R = unknown,>({
                             {campo.tipo === "select" ? (
                                 <select
                                     name={campo.nome}
-                                    value={Form[campo.nome] ?? ""}
+                                    value={typeof Form[campo.nome] === "string" ? Form[campo.nome] as string : ""}
                                     onChange={handlechange}
                                     required
                                     className="w-full rounded-2xl bg-white p-2"
@@ -110,10 +128,12 @@ export const Modal = <T, R = unknown,>({
                                     type={campo.tipo ?? "text"}
                                     placeholder={campo.placeholder}
                                     name={campo.nome}
-                                    value={Form[campo.nome] ?? ""}
+                                    value={campo.tipo === "file"
+                                        ? undefined
+                                        : typeof Form[campo.nome] === "string" ? Form[campo.nome] as string : ""}
                                     onChange={handlechange}
                                     readOnly={campo.somenteLeitura}
-                                    required={!campo.somenteLeitura}
+                                    required={!campo.somenteLeitura && !(campo.tipo === "file" && modoEdicao)}
                                     className={campo.somenteLeitura ? "bg-gray-200 text-gray-600" : undefined}
                                 />
                             )}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import type { ICampoFormulario, IPedido, Tstatuspedidos } from "../../utils"
 import { metodospedidos } from "../../services"
 import { Modal } from "../../components"
-import { useAuth, useToogle } from "../../hooks"
+import { useAuth, useToast, useToogle } from "../../hooks"
 import { ListChecks, PenIcon, Trash } from "lucide-react"
 
 const campos: ICampoFormulario[] = [
@@ -31,6 +31,7 @@ export const Pedidos = () => {
     const [Pedidos, setPedidos] = useState<IPedido[]>([])
     const { isActive, handletoogle } = useToogle()
     const { usuario } = useAuth()
+    const { showToast } = useToast()
     const podeExcluir = usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO"
     const [pedidoEmEdicao, setPedidoEmEdicao] = useState<IPedido | null>(null)
     const [editandoStatus, setEditandoStatus] = useState(false)
@@ -39,22 +40,30 @@ export const Pedidos = () => {
         const listarpedidos = async () => {
             const response = await metodospedidos.listar()
             if (typeof response === "string") {
+                showToast(response, "error")
                 return
-            } else {
-                setPedidos(response)
             }
+            setPedidos(response)
         }
         listarpedidos()
-    }, [])
+    }, [showToast])
 
     const recarregar = async () => {
         const response = await metodospedidos.listar()
-        if (typeof response !== "string") setPedidos(response)
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
+        }
+        setPedidos(response)
     }
 
     const excluir = async (id: number) => {
         const response = await metodospedidos.deletar(id)
-        if (typeof response !== "string") await recarregar()
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
+        }
+        await recarregar()
     }
 
     const fecharModal = () => {

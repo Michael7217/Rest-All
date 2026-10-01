@@ -16,6 +16,19 @@ export const Api = () => {
     }
     return config
 })
+    api.interceptors.response.use(
+        (response) => response,
+        (error: unknown) => {
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                const tinhaSessao = !!localStorage.getItem("usuario")
+                localStorage.removeItem("usuario")
+                if (tinhaSessao && !window.location.pathname.startsWith("/login")) {
+                    window.location.href = "/login"
+                }
+            }
+            return Promise.reject(error)
+        }
+    )
     return (api)
 }
 

@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react"
 import type { ICampoFormulario, Iestoque } from "../../utils"
 import { Modal } from "../../components"
-import { useAuth, useToogle } from "../../hooks"
+import { useAuth, useToast, useToogle } from "../../hooks"
 import { Trash } from "lucide-react"
 import { metodosestoque } from "../../services/metodos/Metodosestoque"
 
 const campos: ICampoFormulario[] = [
-    { nome: "nomeproduto", rotulo: "Nome do Produto", placeholder: "ex: Sal"},
+    { nome: "nomeProduto", rotulo: "Nome do Produto", placeholder: "ex: Sal"},
     { nome: "dataValidade", rotulo: "Data de Validade", placeholder: "ex: 00/00/0000" },
     { nome: "unidadeMedida", rotulo: "Unidade de Medida", placeholder: "ex: Kg" },
     { nome: "quantidade", rotulo: "Quantidade", tipo: "number", placeholder: "ex: 1", parse: (valor) => Number(valor) },
-    { nome: "precounitario", rotulo: "Preço Unitário", tipo: "number", placeholder: "ex: 1.00", parse: (valor) => Number(valor) }
+    { nome: "precoUnitario", rotulo: "Preço Unitário", tipo: "number", placeholder: "ex: 1.00", parse: (valor) => Number(valor) }
 ]
 
 
@@ -18,32 +18,41 @@ export const Estoque = () => {
     const [Estoque, setEstoque] = useState<Iestoque[]>([])
     const {isActive, handletoogle} = useToogle()
     const { usuario } = useAuth()
+    const { showToast } = useToast()
     const podeExcluir = usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO"
 
     useEffect(() => {
         const carregarcardapio = async () => {
             const response = await metodosestoque.listar()
-            if (typeof response !== "string"){
-                setEstoque(response)
+            if (typeof response === "string") {
+                showToast(response, "error")
+                return
             }
+            setEstoque(response)
         }
         carregarcardapio()
-    }, [])
+    }, [showToast])
 
     const recarregar = async () => {
         const response = await metodosestoque.listar()
-        if (typeof response !== "string"){
-            setEstoque(response)
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
         }
+        setEstoque(response)
     }
     const excluir = async (id: number) => {
         const response = await metodosestoque.deletar(id)
-        if (typeof response !== "string") await recarregar()
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
+        }
+        await recarregar()
     }
 
     return(
         <>
-        <Modal isActive={isActive} toogle={handletoogle} criar={metodosestoque.criar} campos={campos} aoCriar={recarregar}/>
+        <Modal key={String(isActive)} isActive={isActive} toogle={handletoogle} criar={metodosestoque.criar} campos={campos} aoCriar={recarregar}/>
         <div className="relative flex w-full items-center mb-3.5">
             {!isActive && (
                 <button
@@ -63,9 +72,9 @@ export const Estoque = () => {
                         <div className="min-w-0 flex-1 wrap-break-word">
                             <p>Id: {produto.id}</p>
                             <h2 className="font-bold text-xl">{produto.nomeProduto}</h2>
-                            <p>{produto.quantidade}</p>
+                            <p><strong>Quantidade:</strong> {produto.quantidade}</p>
                             <strong className="text-xl">R$ {produto.precoUnitario.toFixed(2)}</strong>
-                            <p><strong>Categoria:</strong> {produto.dataValidade}</p>
+                            <p><strong>Validade:</strong> {produto.dataValidade}</p>
                             <p>{produto.unidadeMedida}</p>
                         </div>
                         {podeExcluir && produto.id !== undefined && <div className="shrink-0">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useAuth, useToogle } from "../../hooks"
+import { useAuth, useToast, useToogle } from "../../hooks"
 import { Modal } from "../../components"
 import { metodosusuarios } from "../../services/metodos/Metodosusuarios"
 import type { Idadosretornados } from "../../utils/interfaces/Idadosretornados"
@@ -19,29 +19,42 @@ const campos: ICampoFormulario[] = [
 export const Funcionarios = () => {
     const {isActive,handletoogle} = useToogle()
     const { usuario } = useAuth()
+    const { showToast } = useToast()
     const podeExcluir = usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO"
     const [Funcionarios, setFuncionarios] = useState<Idadosretornados[]>()
 
     useEffect(() => {
         const carregarfuncionarios = async () => {
             const response = await metodosusuarios.ListarFuncionarios()
-            if (typeof response !== "string") setFuncionarios(response)
+            if (typeof response === "string") {
+                showToast(response, "error")
+                return
+            }
+            setFuncionarios(response)
         }
         carregarfuncionarios()
-    }, [])
+    }, [showToast])
 
     const recarregar = async () => {
         const response = await metodosusuarios.ListarFuncionarios()
-        if (typeof response !== "string") setFuncionarios(response)
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
+        }
+        setFuncionarios(response)
     }
     const excluir = async (id: number) => {
         const response = await metodosusuarios.DeletarFuncionario(id)
-        if (typeof response !== "string") await recarregar()
+        if (typeof response === "string") {
+            showToast(response, "error")
+            return
+        }
+        await recarregar()
     }
 
     return (
         <>
-            <Modal isActive={isActive} toogle={handletoogle} criar={metodosusuarios.RegistrarFuncionarios} campos={campos} aoCriar={recarregar} />
+            <Modal key={String(isActive)} isActive={isActive} toogle={handletoogle} criar={metodosusuarios.RegistrarFuncionarios} campos={campos} aoCriar={recarregar} />
             <div className="relative flex w-full items-center mb-3.5">
                 {!isActive && (
                     <button
@@ -55,7 +68,7 @@ export const Funcionarios = () => {
             </div>
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Funcionarios?.map((funcionario) => (
-                    <article key={funcionario.nome} className="record-card flex flex-col gap-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
+                    <article key={funcionario.id ?? funcionario.nome} className="record-card flex flex-col gap-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
                         <div className="flex justify-between gap-2">
                             <div className="min-w-0 flex-1 wrap-break-words">
                                 <h2 className="font-bold text-xl">{funcionario.nome}</h2>

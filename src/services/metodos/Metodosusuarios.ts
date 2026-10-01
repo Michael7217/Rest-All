@@ -1,4 +1,4 @@
-import { Verifica, type IFuncionario, type Iregistro } from "../../utils"
+import { Verifica, type IFuncionario, type Iproprietario, type Iregistro } from "../../utils"
 import type { Idadosretornados } from "../../utils/interfaces/Idadosretornados"
 import { Api } from "../api/Api"
 
@@ -35,7 +35,7 @@ const Editarfuncionario = async (dados: IFuncionario) => {
         return Verifica(error)
     }
 }
-const Editarperfil = async (id: number, dados: Partial<Idadosretornados>) => {
+const Editarperfil = async (id: number, dados: Partial<Iregistro>) => {
     try {
         const response = await Api().put<Idadosretornados>(`/usuarios/${id}`, dados)
         return response
@@ -45,7 +45,7 @@ const Editarperfil = async (id: number, dados: Partial<Idadosretornados>) => {
 }
 const Registrargerentes = async (dados: Iregistro) => {
     try {
-        const response = await Api().post<Iregistro>("/usuarios/gerente", dados)
+        const response = await Api().post<Idadosretornados>("/usuarios/gerente", dados)
         return response
     } catch (error) {
         return Verifica(error)
@@ -64,16 +64,16 @@ const Listarfuncionarios = async () => {
 const Registrarfuncionarios = async (dados: Iregistro) => {
     
     try {
-        const response = await Api().post<Iregistro>("/usuarios/funcionario", dados)
+        const response = await Api().post<Idadosretornados>("/usuarios/funcionario", dados)
         return response
     } catch (error) {
     
         return Verifica(error)
     }
 }
-const Registrarproprietario = async (dados: Iregistro) => {
+const Registrarproprietario = async (dados: Iproprietario) => {
     try {
-        const response = await Api().post<Iregistro>("/usuarios/dono", dados)
+        const response = await Api().post<Idadosretornados>("/usuarios/dono", dados)
         return response
     } catch (error) {
         return Verifica(error)
