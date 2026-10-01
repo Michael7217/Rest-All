@@ -75,16 +75,15 @@ export const Proprietarios = () => {
             </div>
             <section className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
                 {proprietarios.map((proprietario) => (
-                    <article key={proprietario.id ?? proprietario.email} className="record-card flex flex-col gap-2 rounded-2xl border-2 bg-red-500 p-4 text-white">
+                    <article key={proprietario.id ?? proprietario.email} className="record-card flex flex-col gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                         <div className="flex justify-between gap-2">
                             <div className="min-w-0 flex-1 wrap-break-word">
-                                <h2 className="text-xl font-bold">{proprietario.nome}</h2>
-                                <p><strong>Id: </strong>{proprietario.id}</p>
-                                <p><strong>CPF: </strong>{proprietario.cpf}</p>
-                                <p><strong>Email: </strong>{proprietario.email}</p>
-                                <p><strong>Telefone: </strong>{proprietario.telefone}</p>
-                                <p><strong>Restaurante: </strong>{proprietario.restauranteId}</p>
-                                <p><strong>Ativo: </strong>{proprietario.ativo ? "Sim" : "Não"}</p>
+                                <h2 className="text-lg font-bold">{proprietario.nome}</h2>
+                                <p className="text-sm"><strong>CPF:</strong> {proprietario.cpf}</p>
+                                <p className="text-sm"><strong>E-mail:</strong> {proprietario.email}</p>
+                                <p className="text-sm"><strong>Telefone:</strong> {proprietario.telefone}</p>
+                                <p className="text-sm"><strong>Restaurante:</strong> {proprietario.restauranteId}</p>
+                                <p className="text-sm"><strong>Situação:</strong> {proprietario.ativo ? "Ativo" : "Inativo"}</p>
                             </div>
                             {proprietario.id !== undefined && (
                                 <button

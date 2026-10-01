@@ -107,7 +107,7 @@ export const Modal = <T, R = unknown,>({
                 <div className={`flex flex-col w-full gap-y-1 ${emGrade ? "md:grid md:grid-cols-2 md:gap-x-4" : ""}`}>
                     {campos.map((campo) => (
                         <div key={campo.nome} className="flex flex-col gap-1">
-                            <label>{campo.rotulo}</label>
+                            <label htmlFor={campo.nome}>{campo.rotulo}</label>
                             {campo.tipo === "select" ? (
                                 <select
                                     name={campo.nome}
@@ -125,7 +125,9 @@ export const Modal = <T, R = unknown,>({
                                 </select>
                             ) : (
                                 <input
+                                    id={campo.nome}
                                     type={campo.tipo ?? "text"}
+                                    accept={campo.tipo === "file" ? "image/*" : undefined}
                                     placeholder={campo.placeholder}
                                     name={campo.nome}
                                     value={campo.tipo === "file"
@@ -136,6 +138,9 @@ export const Modal = <T, R = unknown,>({
                                     required={!campo.somenteLeitura && !(campo.tipo === "file" && modoEdicao)}
                                     className={campo.somenteLeitura ? "bg-gray-200 text-gray-600" : undefined}
                                 />
+                            )}
+                            {campo.tipo === "file" && (
+                                <p className="text-sm text-white/90">Selecione uma imagem do seu dispositivo.</p>
                             )}
                         </div>
                     ))}

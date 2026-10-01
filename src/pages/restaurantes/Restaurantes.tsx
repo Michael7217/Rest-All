@@ -86,15 +86,14 @@ export const Restaurantes = () => {
                 </div>
                 <section className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
                     {Restaurantes?.map((restaurante) => (
-                        <article key={restaurante.id} className="record-card flex justify-between gap-2 rounded-2xl border-2 bg-red-500 p-4 text-white">
+                        <article key={restaurante.id} className="record-card flex justify-between gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                             <div className="min-w-0 flex-1 wrap-break-words">
-                                <strong>Nome: {restaurante.nome}</strong>
-                                <p>ID: {restaurante.id}</p>
-                                <strong>Status: {restaurante.status}</strong>
-                                <p>Endereço: {restaurante.endereco || "Sem endereço associado"}</p>
-                                <p className="font-bold">Telefone: {restaurante.telefone || "Sem telefone associado"}</p>
-                                <p>CNPJ: {restaurante.cnpj || "Não informado"}</p>
-                                <p>Email: {restaurante.email}</p>
+                                <h2 className="text-lg font-bold">{restaurante.nome}</h2>
+                                <p className="text-sm"><strong>Situação:</strong> {restaurante.status}</p>
+                                <p className="text-sm"><strong>Endereço:</strong> {restaurante.endereco || "Não informado"}</p>
+                                <p className="text-sm"><strong>Telefone:</strong> {restaurante.telefone || "Não informado"}</p>
+                                <p className="text-sm"><strong>CNPJ:</strong> {restaurante.cnpj || "Não informado"}</p>
+                                <p className="text-sm"><strong>E-mail:</strong> {restaurante.email}</p>
                             </div>
                             {restaurante.id !== undefined && (
                                 <button

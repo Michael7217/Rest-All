@@ -112,15 +112,16 @@ export const Pedidos = () => {
             <div className="w-full">
                 <section className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
                     {Pedidos.map((pedido) => (
-                        <article key={pedido.id} className="record-card flex justify-between gap-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
-                            <div className="min-w-0 flex-1 wrap-break-words">
-                                <p>Item: {pedido.itemId}</p>
-                                <strong className="text-xl"> Quantidade: {pedido.quantidade}</strong>
-                                <p>Observação: {pedido.observacao}</p>
-                                <p className="font-bold text-xl">Comanda: {pedido.comandaId}</p>
-                                <p>Valor Total: R$ {pedido.valorTotal}</p>
-                                <p>Status: {pedido.status ?? "Não informado"}</p>
-                                <p>Valor Unitário: {pedido.precoUnitario}</p>
+                        <article key={pedido.id} className="record-card flex justify-between gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
+                            <div className="min-w-0 flex-1 space-y-1 wrap-break-words">
+                                <h2 className="text-lg font-bold">Pedido #{pedido.id}</h2>
+                                <p className="text-sm"><strong>Item:</strong> {pedido.itemId}</p>
+                                <p className="text-sm"><strong>Quantidade:</strong> {pedido.quantidade}</p>
+                                <p className="text-sm"><strong>Comanda:</strong> {pedido.comandaId}</p>
+                                <p className="text-sm"><strong>Valor unitário:</strong> {pedido.precoUnitario == null ? "Não informado" : `R$ ${pedido.precoUnitario.toFixed(2)}`}</p>
+                                <strong className="text-xl">R$ {pedido.valorTotal?.toFixed(2) ?? "0,00"}</strong>
+                                <p className="text-sm"><strong>Status:</strong> {pedido.status ?? "Não informado"}</p>
+                                {pedido.observacao && <p className="text-sm"><strong>Observação:</strong> {pedido.observacao}</p>}
                             </div>
                             {podeExcluir && pedido.id !== undefined && (
                                 <div className="flex flex-col justify-around">

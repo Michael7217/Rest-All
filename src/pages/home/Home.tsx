@@ -89,8 +89,8 @@ const acessos: Icardacesso[] = [
         perfis: ["ADMINISTRADOR"],
     },
     {
-        titulo: "Meus restaurante",
-        descricao: "Gerenciar as informações dos meu restaurante.",
+        titulo: "Meu restaurante",
+        descricao: "Gerencie as informações do seu restaurante.",
         rota: "/meu-restaurante",
         icone: ClipboardList,
         perfis: ["GERENTE", "DONO"],

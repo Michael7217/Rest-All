@@ -35,7 +35,7 @@ export const Cardapiopublico = () => {
         </div>
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Cardapiopublico.map((prato) => ( 
-                    <article key={`${prato.id}-${prato.nome}`} className="record-card flex flex-col gap-2 rounded-2xl border-2 border-white p-4 bg-red-500 text-white">
+                    <article key={`${prato.id}-${prato.nome}`} className="record-card flex flex-col gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                         {prato.imagem && (
                             <img
                                 src={prato.imagem}
@@ -45,12 +45,11 @@ export const Cardapiopublico = () => {
                         )}
                         <div className="flex justify-between gap-2">
                             <div className="min-w-0 flex-1 wrap-break-word">
-                                <p>Id: {prato.id}</p>
-                                <h2 className="font-bold text-xl">Nome: {prato.nome}</h2>
-                                <p><strong>Descrição:</strong> {prato.descricao}</p>
+                                <h2 className="text-lg font-bold">{prato.nome}</h2>
+                                <p className="text-sm opacity-90">{prato.descricao}</p>
                                 <strong className="text-xl">R$ {prato.preco.toFixed(2)}</strong>
-                                <p><strong>Categoria:</strong> {prato.categoria}</p>
-                                <p><strong>Disponibilidade:</strong> {prato.disponivel ? "Disponível" : "Indisponível"}</p>
+                                <p className="text-sm"><strong>Categoria:</strong> {prato.categoria}</p>
+                                <p className="text-sm"><strong>Disponibilidade:</strong> {prato.disponivel ? "Disponível" : "Indisponível"}</p>
                             </div>
                         </div>
                     </article>

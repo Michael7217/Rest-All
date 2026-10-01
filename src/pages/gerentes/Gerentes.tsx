@@ -101,16 +101,15 @@ export const Gerentes = () => {
             </div>
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Gerentes?.map((gerente) => (
-                    <article key={gerente.id ?? gerente.nome} className="record-card flex flex-col gap-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
+                    <article key={gerente.id ?? gerente.nome} className="record-card flex flex-col gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                         <div className="flex justify-between gap-2">
                             <div className="min-w-0 flex-1 wrap-break-word">
-                                <h2 className="font-bold text-xl">{gerente.nome}</h2>
-                                <p><strong>Id: </strong>{`${gerente.id}`}</p>
-                                <p><strong>Cargo: </strong>{`${gerente.perfil}`}</p>
-                                <p><strong>CPF: </strong>{`${gerente.cpf}`}</p>
-                                <p><strong>Email: </strong> {gerente.email}</p>
-                                <p><strong>Telefone: </strong> {gerente.telefone}</p>
-                                <p><strong>Ativo: </strong>{gerente.ativo ? "Sim" : "Não"}</p>
+                                <h2 className="text-lg font-bold">{gerente.nome}</h2>
+                                <p className="text-sm"><strong>Perfil:</strong> {gerente.perfil}</p>
+                                <p className="text-sm"><strong>CPF:</strong> {gerente.cpf}</p>
+                                <p className="text-sm"><strong>E-mail:</strong> {gerente.email}</p>
+                                <p className="text-sm"><strong>Telefone:</strong> {gerente.telefone}</p>
+                                <p className="text-sm"><strong>Situação:</strong> {gerente.ativo ? "Ativo" : "Inativo"}</p>
                             </div>
                             {podeGerenciar && gerente.id !== undefined && (
                                 <div className="flex shrink-0 flex-col justify-around gap-3">

@@ -22,7 +22,7 @@ const campos: ICampoFormulario[] = [
         ],
         parse: (valor) => valor === "true",
     },
-    { nome: "imagem", tipo: "file", rotulo: "Imagem", placeholder: "ex: example.com/image" },
+    { nome: "imagem", tipo: "file", rotulo: "Imagem do prato", placeholder: "Selecione uma imagem" },
 ]
 
 
@@ -137,18 +137,18 @@ export const Cardapio = () => {
         <div className="flex flex-col items-center">
             {!islogged ? (<section className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
                     {Restaurantespublico?.map((restaurante) => (
-                        <article key={restaurante.id} className="record-card flex justify-between gap-2 rounded-2xl border-2 bg-red-500 p-4 text-white">
+                        <article key={restaurante.id} className="record-card flex justify-between gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                             <div className="min-w-0 flex-1 wrap-break-words flex flex-col">
-                                <strong>Nome: {restaurante.nome}</strong>              
-                                <strong>Status: {restaurante.status ? "Aberto" : "Fechado"}</strong>
-                                <p>Endereço: {restaurante.endereco || "Sem endereço associado"}</p>
-                                <p className="font-bold">Telefone: {restaurante.telefone || "Sem telefone associado"}</p>
+                                <h2 className="text-lg font-bold">{restaurante.nome}</h2>
+                                <p className="text-sm opacity-90">{restaurante.status ? "Aberto" : "Fechado"}</p>
+                                <p className="text-sm"><strong>Endereço:</strong> {restaurante.endereco || "Não informado"}</p>
+                                <p className="text-sm"><strong>Telefone:</strong> {restaurante.telefone || "Não informado"}</p>
                             </div>
                             {restaurante.id !== undefined && (
                                 <button
                                     type="button"
-                                    aria-label={`Editar restaurante ${restaurante.nome}`}
-                                    title="Editar restaurante"
+                                    aria-label={`Ver cardápio de ${restaurante.nome}`}
+                                    title="Ver cardápio"
                                     onClick={() => {
                                         navigate(`/cardapio/${restaurante.id}`)
                                     }}
@@ -162,7 +162,7 @@ export const Cardapio = () => {
                 </section>) : 
                 (<section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Cardapio.map((prato) => (
-                    <article key={`${prato.id}-${prato.nome}`} className="record-card flex flex-col gap-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
+                    <article key={`${prato.id}-${prato.nome}`} className="record-card flex flex-col gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                         {prato.imagem && (
                             <img
                                 src={prato.imagem}
@@ -172,12 +172,11 @@ export const Cardapio = () => {
                         )}
                         <div className="flex justify-between gap-2">
                             <div className="min-w-0 flex-1 wrap-break-word">
-                                {islogged && <p>Id: {prato.id}</p>}
-                                <h2 className="font-bold text-xl">Nome: {prato.nome}</h2>
-                                <strong className="text-xl">Preço: R$ {prato.preco.toFixed(2)}</strong>
-                                <p><strong>Descrição:</strong> {prato.descricao}</p>
-                                <p><strong>Categoria:</strong> {prato.categoria}</p>
-                                <p><strong>Disponibilidade:</strong> {prato.disponivel ? "Disponível" : "Indisponível"}</p>
+                                <h2 className="text-lg font-bold">{prato.nome}</h2>
+                                <p className="text-sm opacity-90">{prato.descricao}</p>
+                                <strong className="text-xl">R$ {prato.preco.toFixed(2)}</strong>
+                                <p className="text-sm"><strong>Categoria:</strong> {prato.categoria}</p>
+                                <p className="text-sm"><strong>Disponibilidade:</strong> {prato.disponivel ? "Disponível" : "Indisponível"}</p>
                             </div>
                             {podeExcluir && prato.id !== undefined && (
                                 <div className="flex shrink-0 flex-col justify-around gap-3">

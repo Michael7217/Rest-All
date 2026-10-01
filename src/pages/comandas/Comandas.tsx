@@ -189,15 +189,15 @@ export const Comandas = () => {
             
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Comandas.map((comanda) => (
-                    <article key={comanda.id} className="record-card flex flex-row rounded-2xl border-2 p-4 bg-red-500 text-white">
-                        <div className="min-w-0 flex-1 wrap-break-words">
-                        <h2 className="font-bold text-xl">Comanda: {comanda.numero}</h2>
-                        <p>Mesa: {comanda.mesa}</p>
-                        <strong className="text-xl">Total: R$ {comanda.valorTotal?.toFixed(2)}</strong>
-                        <p>ID Funcionário: {comanda.funcionarioId}</p>
-                        <p>Status: {comanda.status?.toLowerCase() === "aberta" ? "Aberta" : "Fechada"}</p>
-                        <p>Data de abertura: {comanda.dataAbertura}</p>
-                        <p>Data de fechamento: {comanda.dataFechamento}</p>
+                    <article key={comanda.id} className="record-card flex flex-row rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
+                        <div className="min-w-0 flex-1 space-y-1 wrap-break-words">
+                        <h2 className="text-lg font-bold">Comanda {comanda.numero}</h2>
+                        <strong className="text-xl">R$ {comanda.valorTotal?.toFixed(2) ?? "0,00"}</strong>
+                        <p className="text-sm"><strong>Mesa:</strong> {comanda.mesa}</p>
+                        <p className="text-sm"><strong>Status:</strong> {comanda.status?.toLowerCase() === "aberta" ? "Aberta" : "Fechada"}</p>
+                        <p className="text-sm"><strong>Funcionário:</strong> {comanda.funcionarioId ?? "Não informado"}</p>
+                        <p className="text-sm"><strong>Aberta em:</strong> {comanda.dataAbertura || "Não informado"}</p>
+                        <p className="text-sm"><strong>Fechada em:</strong> {comanda.dataFechamento || "Em aberto"}</p>
                         </div>
                         <div className="flex shrink-0 flex-col items-center justify-around gap-4">
                             <button onClick={() => Abrircomanda(comanda)} aria-label="Ver detalhes"><Eye className="cursor-pointer"/></button>

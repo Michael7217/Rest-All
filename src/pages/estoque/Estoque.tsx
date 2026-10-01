@@ -68,14 +68,12 @@ export const Estoque = () => {
             
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Estoque.map((produto) => (
-                    <article key={`${produto.id}-${produto.nomeProduto}`} className="record-card flex items-start justify-between gap-3 rounded-2xl border-2 p-4 bg-red-500 text-white">
-                        <div className="min-w-0 flex-1 wrap-break-word">
-                            <p>Id: {produto.id}</p>
-                            <h2 className="font-bold text-xl">{produto.nomeProduto}</h2>
-                            <p><strong>Quantidade:</strong> {produto.quantidade}</p>
+                    <article key={`${produto.id}-${produto.nomeProduto}`} className="record-card flex items-start justify-between gap-3 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
+                        <div className="min-w-0 flex-1 space-y-1 wrap-break-word">
+                            <h2 className="text-lg font-bold">{produto.nomeProduto}</h2>
+                            <p className="text-sm"><strong>Quantidade:</strong> {produto.quantidade} {produto.unidadeMedida}</p>
                             <strong className="text-xl">R$ {produto.precoUnitario.toFixed(2)}</strong>
-                            <p><strong>Validade:</strong> {produto.dataValidade}</p>
-                            <p>{produto.unidadeMedida}</p>
+                            <p className="text-sm"><strong>Validade:</strong> {produto.dataValidade}</p>
                         </div>
                         {podeExcluir && produto.id !== undefined && <div className="shrink-0">
                             <button onClick={() => {excluir(produto.id!)}} className="cursor-pointer"><Trash/></button>

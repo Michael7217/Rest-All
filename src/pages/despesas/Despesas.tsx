@@ -91,12 +91,12 @@ export const Despesas = () => {
             
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Despesas.map((despesa) => (
-                    <article key={`${despesa.id}`} className="record-card flex items-start justify-between gap-3 rounded-2xl border-2 p-4 bg-red-500 text-white">
-                        <div className="min-w-0 flex-1 wrap-break-word">
-                            <strong className="text-xl">Valor: R$ {despesa.valor.toFixed(2)}</strong>
-                            <h2 className="font-bold text-xl">{despesa.descricao}</h2>
-                            <p><strong>Categoria:</strong> {despesa.categoria}</p>
-                            <p><strong>Data:</strong> {despesa.dataDespesa}</p>
+                    <article key={`${despesa.id}`} className="record-card flex items-start justify-between gap-3 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
+                        <div className="min-w-0 flex-1 space-y-1 wrap-break-word">
+                            <h2 className="text-lg font-bold">{despesa.descricao}</h2>
+                            <strong className="text-xl">R$ {despesa.valor.toFixed(2)}</strong>
+                            <p className="text-sm"><strong>Categoria:</strong> {despesa.categoria}</p>
+                            <p className="text-sm"><strong>Data:</strong> {despesa.dataDespesa}</p>
                         </div>
                         {podeExcluir && despesa.id !== undefined && (
                             <div className="flex shrink-0 flex-col justify-around gap-3">

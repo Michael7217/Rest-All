@@ -68,15 +68,14 @@ export const Funcionarios = () => {
             </div>
             <section className="grid grid-cols-1 w-full gap-4 md:h-auto md:grid-cols-2 ">
                 {Funcionarios?.map((funcionario) => (
-                    <article key={funcionario.id ?? funcionario.nome} className="record-card flex flex-col gap-2 rounded-2xl border-2 p-4 bg-red-500 text-white">
+                    <article key={funcionario.id ?? funcionario.nome} className="record-card flex flex-col gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                         <div className="flex justify-between gap-2">
                             <div className="min-w-0 flex-1 wrap-break-words">
-                                <h2 className="font-bold text-xl">{funcionario.nome}</h2>
-                                <p><strong>Id: </strong>{`${funcionario.id}`}</p>
-                                <p><strong>Cargo: </strong>{`${funcionario.cargo}`}</p>
-                                <p><strong>Email: </strong> {funcionario.email}</p>
-                                <p><strong>Telefone: </strong> {funcionario.telefone}</p>
-                                <p><strong>Ativo: </strong>{funcionario.ativo ? "Sim" : "Não"}</p>
+                                <h2 className="text-lg font-bold">{funcionario.nome}</h2>
+                                <p className="text-sm"><strong>Cargo:</strong> {funcionario.cargo}</p>
+                                <p className="text-sm"><strong>E-mail:</strong> {funcionario.email}</p>
+                                <p className="text-sm"><strong>Telefone:</strong> {funcionario.telefone}</p>
+                                <p className="text-sm"><strong>Situação:</strong> {funcionario.ativo ? "Ativo" : "Inativo"}</p>
                             </div>
                             {podeExcluir && funcionario.id !== undefined && (
                                 <button
