@@ -140,7 +140,6 @@ export const Cardapio = () => {
                         <article key={restaurante.id} className="record-card flex justify-between gap-2 rounded-2xl border-2 border-red-500 bg-red-500 p-4 text-white transition-colors hover:bg-white hover:text-red-500">
                             <div className="min-w-0 flex-1 wrap-break-words flex flex-col">
                                 <h2 className="text-lg font-bold">{restaurante.nome}</h2>
-                                <p className="text-sm opacity-90">{restaurante.status ? "Aberto" : "Fechado"}</p>
                                 <p className="text-sm"><strong>Endereço:</strong> {restaurante.endereco || "Não informado"}</p>
                                 <p className="text-sm"><strong>Telefone:</strong> {restaurante.telefone || "Não informado"}</p>
                             </div>
