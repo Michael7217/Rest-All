@@ -172,6 +172,7 @@ export const Cardapio = () => {
                         <div className="flex justify-between gap-2">
                             <div className="min-w-0 flex-1 wrap-break-word">
                                 <h2 className="text-lg font-bold">{prato.nome}</h2>
+                                <p className="text-sm opacity-90">ID: {prato.id}</p>
                                 <p className="text-sm opacity-90">{prato.descricao}</p>
                                 <strong className="text-xl">R$ {prato.preco.toFixed(2)}</strong>
                                 <p className="text-sm"><strong>Categoria:</strong> {prato.categoria}</p>
