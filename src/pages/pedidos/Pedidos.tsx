@@ -29,7 +29,7 @@ const camposStatus: ICampoFormulario[] = [
 
 export const Pedidos = () => {
     const [Pedidos, setPedidos] = useState<IPedido[]>([])
-    const [ComandasAbertas, setComandasAbertas] = useState<IComanda[]>([])
+    const [Comandas, setComandas] = useState<IComanda[]>([])
     const [ItensCardapio, setItensCardapio] = useState<Icardapio[]>([])
     const [carregandoOpcoes, setCarregandoOpcoes] = useState(true)
     const { isActive, handletoogle } = useToogle()
@@ -38,6 +38,9 @@ export const Pedidos = () => {
     const podeExcluir = usuario?.perfil === "GERENTE" || usuario?.perfil === "DONO"
     const [pedidoEmEdicao, setPedidoEmEdicao] = useState<IPedido | null>(null)
     const [editandoStatus, setEditandoStatus] = useState(false)
+    const ComandasAbertas = Comandas.filter((comanda) =>
+        comanda.status.trim().toUpperCase() === "ABERTA" && comanda.id !== undefined,
+    )
 
     useEffect(() => {
         const listarpedidos = async () => {
@@ -61,9 +64,7 @@ export const Pedidos = () => {
             if (typeof comandas === "string") {
                 showToast(comandas, "error")
             } else {
-                setComandasAbertas(comandas.filter((comanda) =>
-                    comanda.status.trim().toUpperCase() === "ABERTA" && comanda.id !== undefined,
-                ))
+                setComandas(comandas)
             }
 
             if (typeof itens === "string") {
@@ -177,11 +178,11 @@ export const Pedidos = () => {
                                 <h2 className="text-lg font-bold">Pedido #{pedido.id}</h2>
                                 <p className="text-sm"><strong>Item:</strong> {pedido.itemId}</p>
                                 <p className="text-sm"><strong>Quantidade:</strong> {pedido.quantidade}</p>
-                                <p className="text-sm"><strong>Comanda:</strong> {pedido.comandaId}</p>
+                                <p className="text-sm"><strong>Comanda:</strong> {Comandas.find((comanda) => comanda.id === pedido.comandaId)?.numero ?? pedido.comandaId}</p>
                                 <p className="text-sm"><strong>Valor unitário:</strong> {pedido.precoUnitario == null ? "Não informado" : `R$ ${pedido.precoUnitario.toFixed(2)}`}</p>
                                 <strong className="text-xl">R$ {pedido.valorTotal?.toFixed(2) ?? "0,00"}</strong>
                                 <p className="text-sm"><strong>Status:</strong> {pedido.status ?? "Não informado"}</p>
-                                {pedido.observacao && <p className="text-sm"><strong>Observação:</strong> {pedido.observacao}</p>}
+                                <p className="text-sm"><strong>Observação:</strong> {pedido.observacao}</p> 
                             </div>
                             {podeExcluir && pedido.id !== undefined && (
                                 <div className="flex flex-col justify-around">

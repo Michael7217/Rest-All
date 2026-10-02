@@ -8,8 +8,18 @@ import { metodosdespesas } from "../../services/metodos/Metodosdespesas"
 const campos: ICampoFormulario[] = [
     { nome: "valor", rotulo: "Valor", tipo: "number", placeholder: "ex: 1.00", parse: (valor) => Number(valor) },
     { nome: "descricao", rotulo: "Descrição", placeholder: "Compra de insumos"},
-    { nome: "dataDespesa", rotulo: "Data da Despesa", placeholder: "ex: 00/00/0000" },
-    { nome: "categoria", rotulo: "Categoria", placeholder: "ex: FIXA/VARIÁVEL" }
+    { nome: "dataDespesa",
+        rotulo: "Data da Despesa", 
+        tipo: "date",
+        placeholder: "Selecione a data" },
+    { nome: "categoria",
+        rotulo: "Categoria",
+        tipo: "select",
+        opcoes: [
+            {valor: "FIXA", rotulo: "Fixa"},
+            {valor: "VARIAVEL", rotulo: "Variável"}
+        ],
+        placeholder: "Selecione a categoria" }
 ]
 
 
@@ -102,7 +112,7 @@ export const Despesas = () => {
                             <p className="text-sm"><strong>Data:</strong> {despesa.dataDespesa}</p>
                         </div>
                         {podeExcluir && despesa.id !== undefined && (
-                            <div className="flex shrink-0 flex-col justify-around gap-3">
+                            <div className="flex shrink-0 flex-col justify-around h-full">
                                 <button
                                     type="button"
                                     aria-label="Editar despesa"

@@ -7,7 +7,7 @@ import { metodosestoque } from "../../services/metodos/Metodosestoque"
 
 const campos: ICampoFormulario[] = [
     { nome: "nomeProduto", rotulo: "Nome do Produto", placeholder: "ex: Sal"},
-    { nome: "dataValidade", rotulo: "Data de Validade", placeholder: "ex: 00/00/0000" },
+    { nome: "dataValidade", rotulo: "Data de Validade", tipo: "date", placeholder: "ex: 00/00/0000" },
     { nome: "unidadeMedida", rotulo: "Unidade de Medida", placeholder: "ex: Kg" },
     { nome: "quantidade", rotulo: "Quantidade", tipo: "number", placeholder: "ex: 1", parse: (valor) => Number(valor) },
     { nome: "precoUnitario", rotulo: "Preço Unitário", tipo: "number", placeholder: "ex: 1.00", parse: (valor) => Number(valor) }

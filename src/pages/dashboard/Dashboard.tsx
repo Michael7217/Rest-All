@@ -76,7 +76,7 @@ export const Dashboard = () => {
                         </article>
                         <article className="rounded-lg border border-gray-200 bg-white p-4">
                             <h2 className="text-sm font-medium text-gray-500">Lucro líquido</h2>
-                            <p className="mt-2 text-lg font-bold text-gray-900 sm:text-2xl">{formatarMoeda(dados.lucroLiquido)}</p>
+                            <p className={`mt-2 text-lg font-bold ${dados.lucroLiquido < 0 ? "text-red-500" : "text-green-500"} text-gray-900 sm:text-2xl`}>{formatarMoeda(dados.lucroLiquido)}</p>
                         </article>
                         <article className="rounded-lg border border-gray-200 bg-white p-4">
                             <h2 className="text-sm font-medium text-gray-500">Quantidade de comandas</h2>
