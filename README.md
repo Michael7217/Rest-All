@@ -297,5 +297,3 @@ Graduando em Ciência da Computação pela Universidade Federal do Ceará (UFC),
 O **Rest All** representa uma etapa importante da minha trajetória de aprendizado e desenvolvimento.
 
 Mais do que aplicar tecnologias como **React, TypeScript, Tailwind CSS, API REST e banco de dados**, o projeto proporcionou a oportunidade de transformar conhecimentos teóricos em uma aplicação prática, enfrentando desafios reais de desenvolvimento e buscando soluções para cada problema encontrado.
-
-> **Construir, errar, pesquisar, solucionar e aprender. Cada desafio do projeto foi uma oportunidade de evoluir como desenvolvedor.**
